@@ -6,10 +6,14 @@ export default async function Page({ params }: { params: { month: string; year: 
   const { month, year } = params;
   const games = await fetchGamesByReleaseDate(month, year);
 
+  if (!games) {
+    return <p>No data</p>
+  }
+
   return (
     <main>      
       <ul>
-        {games.results.map((entry: Game) => (
+        {games?.results?.map((entry: Game) => (
           <li key={entry.id}>
             {entry.name}<br />
             {formatDate(entry?.released)}<br />

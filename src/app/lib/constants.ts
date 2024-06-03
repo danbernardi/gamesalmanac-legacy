@@ -7,7 +7,7 @@ export const PLATFORMS = {
   187: 'PS5',
   186: 'Series X',
   7: 'Switch',
-  // 4: 'PC',
+  4: 'PC',
 };
 
 export const MONTHS = {

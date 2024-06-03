@@ -1,6 +1,5 @@
-import { MONTHS, PLATFORMS } from "@/app/lib/constants";
-import { fetchGamesByReleaseDate, groupGamesByDate } from "@/app/lib/data";
-import type { Game, Platform } from "@/app/lib/types";
+import { fetchGamesByReleaseDate } from "@/app/lib/data";
+import type { Game } from "@/app/lib/types";
 import { formatDate } from "@/app/lib/utils";
 
 export default async function Page({ params }: { params: { month: string; year: string; } }) {

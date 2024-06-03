@@ -6,12 +6,12 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const links = Object.values(MONTHS).map((month) => ({
-  name: month, href: `/dashboard/${month.toLowerCase()}/2024`
+  name: month, href: `/${month.toLowerCase()}/2024`
 }));
 
 links.push({
   name: 'TBD',
-  href: `/dashboard/tbd/2024`,
+  href: `/tbd/2024`,
 });
 
 export default function SideNav() {

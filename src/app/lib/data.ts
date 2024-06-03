@@ -37,8 +37,6 @@ export async function fetchGamesByReleaseDate(month: string, year: string) {
   endDate.setMonth(startDate.getMonth() + 1);
   endDate.setDate(0);
 
-  console.log(startDate.getTime() / 1000, endDate.getTime() / 1000);
-
   try {
     const response = await fetch(`${BASE}/games`, {
       method: 'POST',

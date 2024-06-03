@@ -58,8 +58,8 @@ export async function fetchGamesByReleaseDate(month: string, year: string) {
   }
 }
 
-export function groupByDate(games: Game[]): Group[] {
-  return games.reduce((acc: Group[], curr: Game) => {
+export function groupByDate(games: Game[]): Group {
+  const groupedData = games.reduce((acc: Group, curr: Game): Group => {
     const releaseDate = new Date(curr.first_release_date * 1000);
     const releaseDateStr = releaseDate.toISOString();
 
@@ -75,44 +75,12 @@ export function groupByDate(games: Game[]): Group[] {
     }
     return acc;
   }, {});
-}
 
-// export function groupGamesByDate(games: Game[]): Group[] {
-//   return games.reduce((acc: Group[], curr: Game) => {
-//     const releaseDate = new Date(curr.released);
-//     const year = `${releaseDate.getFullYear()}`;
-//     const month = `${releaseDate.getMonth()}`;
-
-//     const yearEntry = acc.find(entry => entry.year === year);
-
-//     if (yearEntry) {
-//       const monthEntry = yearEntry.months.find(entry => entry.month === month);
-//       if (monthEntry) {
-//         monthEntry.games.push(curr);
-//       } else {
-//         yearEntry.months.push({
-//           month,
-//           games: [curr]
-//         });
-//       };
-//     } else {
-//       acc.push({
-//         year,
-//         months: [
-//           {
-//             month,
-//             games: [curr],
-//           }
-//         ]
-//       })
-//     }
-
-//     return acc;
-//   }, []);
-// };
+  return groupedData;
+};
 
 export interface Group {
-  [date: string]: {
+  [isoDate: string]: {
     games: Game[];
-  }[];
+  };
 };

@@ -1,14 +1,11 @@
-import { CATEGORIES } from "@/app/lib/constants";
-import { fetchGamesByReleaseDate, groupByDate } from "@/app/lib/data";
+import { Group, fetchGamesByReleaseDate, groupByDate } from "@/app/lib/data";
 import type { Game } from "@/app/lib/types";
-import { formatDate } from "@/app/lib/utils";
 import { Suspense } from "react";
 
 export default async function Page({ params }: { params: { month: string; year: string; } }) {
   const { month, year } = params;
   const games = await fetchGamesByReleaseDate(month, year);
-  const groupedGames = groupByDate(games);
-  console.log(groupByDate(games));
+  const groupedGames: Group = groupByDate(games);
 
   if (!games) {
     return <p>No data</p>
@@ -17,8 +14,8 @@ export default async function Page({ params }: { params: { month: string; year: 
   return (
     <main>
       <Suspense fallback={<p>loading...</p>}>
-          {Object.keys(groupedGames)?.map((isoDate: string, index: number) => {
-            const entry = groupedGames[isoDate]
+          {Object.keys(groupedGames)?.map((isoDate: string) => {
+            const entry = groupedGames[isoDate];
 
             return (
               <div key={isoDate}>

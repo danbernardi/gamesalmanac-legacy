@@ -1,5 +1,5 @@
 // Format to human readable date
-export function formatDate (dateString: string) {
-  const date = new Date(dateString);
+export function formatDate (timecode: number) {
+  const date = new Date(timecode * 1000);
   return date.toLocaleDateString('en')
 };

@@ -18,7 +18,7 @@ export default function SideNav() {
   const pathname = usePathname();
 
   return (
-    <div className="flex h-full flex-col px-3 py-4 md:px-2">
+    <div className="flex h-full flex-col px-3 md:px-2">
       <ul className="sticky top-0 py-6">
         {links.map((link) => (
           <li key={link.href} className="mb-3">

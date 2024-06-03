@@ -3,15 +3,12 @@ export interface Game {
   name: string;
   slug: string;
   platforms: Platform[];
-  released: string;
-  tba: boolean;
-  updated: string;
+  first_release_date: number;
 };
 
 export interface Platform {
-  platform: {
-    id: number;
-    name: string;
-    slug: string;
-  }
+  id: number;
+  name: string;
+  slug: string;
+  abbreviation: string;
 };

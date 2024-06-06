@@ -5,18 +5,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname, useParams } from "next/navigation";
+import { usePathname, useParams, useSearchParams } from "next/navigation";
 
-const links = Object.values(MONTHS).map((month) => ({
-  name: month, href: `/${month.toLowerCase()}/2024`
-}));
-
-links.push({
-  name: 'TBD',
-  href: `/tbd/2024`,
+const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month: string) => {
+  const name = MONTHS[parseInt(month)];
+  return {
+    name,
+    path: `/${month}/2024`,
+    href: `/${month}/2024?${searchParams.toString()}`,
+  }
 });
 
 export default function SideNav() {
+  const searchParams = useSearchParams();
   const pathname = usePathname();
   const { year } = useParams();
 
@@ -27,16 +28,16 @@ export default function SideNav() {
           <CardTitle>{year}</CardTitle>
         </CardHeader>
         <CardContent>
-          {links.map((link) => (
+          {links(searchParams).map((link) => (
             <Button
               key={link.href}
-              variant={ pathname === link.href ? 'default' : 'secondary' }
-              className="mb-3 w-full justify-start"
+              variant={ pathname === link.path ? 'default' : 'secondary' }
+              className="mb-3 w-full justify-start text-semibold"
               asChild
             >
               <Link href={link.href} className={cn(
                 {
-                  'font-bold': pathname === link.href
+                  'text-primary-foreground': pathname === link.path
                 }
                 )}>
                 {link.name}

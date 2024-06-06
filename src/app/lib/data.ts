@@ -1,7 +1,5 @@
-import { ACCESS_TOKEN, CLIENT_ID, PLATFORMS } from "./constants";
-import { Game } from "./types";
-// import { Game } from "./types";
-// import { convertToProperDate } from "./utils";
+import { ACCESS_TOKEN, CLIENT_ID, DEFAULT_PLATFORMS, MONTHS } from "./constants";
+import { Filters, Game } from "./types";
 
 const BASE = 'https://api.igdb.com/v4';
 const headers = {
@@ -12,38 +10,28 @@ const headers = {
 
 const LIMIT = 500;
 
-// export async function fetchPlatforms() {
-//   try {
-//     const response = await fetch(`${BASE}/platforms`, {
-//       method: 'POST',
-//       headers,
-//       body: `
-//         fields category,abbreviation,name,platform_family,platform_logo.url,slug;
-//         where id = (${Object.keys(PLATFORMS).join(', ')});
-//         limit ${LIMIT};
-//       `,
-//     });
-
-//     return response.json();
-//   } catch (error) {
-//     console.error('Database Error:', error);
-//     throw new Error('Failed to fetch platform data.');
-//   }
-// }
-
-export async function fetchGamesByReleaseDate(month: string, year: string) {
-  const startDate = new Date(`${month} 1 ${year}`);
-  const endDate = new Date(`${month} 1 ${year}`);
+export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Filters) {
+  const monthStr = MONTHS[month];
+  const startDate = new Date(`${monthStr} 1 ${year}`);
+  const endDate = new Date(`${monthStr} 1 ${year}`);
   endDate.setMonth(startDate.getMonth() + 1);
   endDate.setDate(0);
+
+  console.log(filters);
+
+  // @ts-expect-error ts(2339)
+  const platforms = typeof filters?.platforms === 'string' ? filters.platforms.split('-') : DEFAULT_PLATFORMS;
+  const platformFilter = platforms[0] ? `(${platforms.join(', ')})` : null;
+
+  console.log(platforms, platformFilter);
 
   try {
     const response = await fetch(`${BASE}/games`, {
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,name,platforms.abbreviation,version_parent;
-        where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = (${Object.keys(PLATFORMS).join(', ')}) & themes != (42) & version_parent = null & category = (0, 2, 4, 8, 9, 11);
+        fields category,first_release_date,name,platforms.abbreviation,version_parent,cover.width,cover.height,cover.url,total_rating,rating_count;
+        where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (42) & version_parent = null & category = (0, 2, 4, 8, 9, 11);
         sort first_release_date asc;
         limit ${LIMIT};
       `

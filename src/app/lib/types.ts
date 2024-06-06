@@ -4,6 +4,13 @@ export interface Game {
   slug: string;
   platforms: Platform[];
   first_release_date: number;
+  category: number;
+  cover: {
+    id: number;
+    width: number;
+    height: number;
+    url: string;
+  }
 };
 
 export interface Platform {
@@ -11,4 +18,8 @@ export interface Platform {
   name: string;
   slug: string;
   abbreviation: string;
+};
+
+export interface Filters {
+  platforms: number[]
 };

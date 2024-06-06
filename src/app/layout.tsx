@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
-import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
+import { Providers } from "./providers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -25,14 +25,10 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           fontSans.variable
         )}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+          <div className="bg-gradient-to-t from-[#41005F] to-[#000E31] dark:to-[#18083A] dark:from-[#330943] fixed min-w-full min-h-full left-0 top-0 z-0" />
+          <Providers>
             {children}
-          </ThemeProvider>
+          </Providers>
         </body>
     </html>
   );

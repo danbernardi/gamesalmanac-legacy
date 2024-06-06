@@ -1,6 +1,5 @@
 import { Group, fetchGamesByReleaseDate, groupByDate } from "@/app/lib/data";
 import type { Filters, Game } from "@/app/lib/types";
-import { Suspense } from "react";
 import {
   Card,
   CardContent,
@@ -10,7 +9,6 @@ import {
 import Image from "next/image";
 import { CATEGORIES } from "@/app/lib/constants";
 import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
 
 interface PageProps {
   params: { month: number; year: string; };
@@ -56,36 +54,34 @@ export default async function Page({ params, searchParams }: PageProps) {
 
             <CardContent>
               {entry.games.map((game: Game) => (
-                <Suspense key={game.id} fallback={<Skeleton />}>
-                  <div className="py-4 px-6 w-[calc(100%+3rem)] -ml-6 odd:bg-secondary/40 flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-10 overflow-hidden rounded-sm mr-3">
-                        {game?.cover?.url ? (
-                          <Image
-                            width={game.cover.width}
-                            height={game.cover.height}
-                            src={`https:${game.cover.url}`}
-                            alt={`Cover thumbnail for ${game.name}`}
-                          />
-                        ) : (
-                          <div className="w-10 h-10 bg-secondary-foreground/20" />
-                        )}
-                      </div>
-                      <div>
-                        <strong className="flex items-center">
-                          {game.name}
-                        </strong>
-                        <span className="text-sm text-foreground/75">
-                          {game?.platforms?.map(plat => plat?.abbreviation).join(', ')}
-                        </span>
-                      </div>
+                <div key={game.id} className="py-4 px-6 w-[calc(100%+3rem)] -ml-6 odd:bg-secondary/40 flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="w-10 overflow-hidden rounded-sm mr-3">
+                      {game?.cover?.url ? (
+                        <Image
+                          width={game.cover.width}
+                          height={game.cover.height}
+                          src={`https:${game.cover.url}`}
+                          alt={`Cover thumbnail for ${game.name}`}
+                        />
+                      ) : (
+                        <div className="w-10 h-10 bg-secondary-foreground/20" />
+                      )}
                     </div>
-
-                    <Badge variant="outline" className="ml-3">
-                      {CATEGORIES[game.category]}
-                    </Badge>
+                    <div>
+                      <strong className="flex items-center">
+                        {game.name}
+                      </strong>
+                      <span className="text-sm text-foreground/75">
+                        {game?.platforms?.map(plat => plat?.abbreviation || plat.alternative_name || plat.name).join(', ')}
+                      </span>
+                    </div>
                   </div>
-                </Suspense>
+
+                  <Badge variant="outline" className="ml-3">
+                    {CATEGORIES[game.category]}
+                  </Badge>
+                </div>
               ))}
             </CardContent>
           </Card>

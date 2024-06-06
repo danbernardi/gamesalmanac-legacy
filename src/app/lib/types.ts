@@ -15,9 +15,9 @@ export interface Game {
 
 export interface Platform {
   id: number;
-  name: string;
-  slug: string;
   abbreviation: string;
+  name: string;
+  alternative_name: string;
 };
 
 export interface Filters {

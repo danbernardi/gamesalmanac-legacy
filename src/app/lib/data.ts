@@ -30,7 +30,7 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,name,platforms.abbreviation,version_parent,cover.width,cover.height,cover.url,total_rating,rating_count;
+        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,version_parent,cover.width,cover.height,cover.url,total_rating,rating_count;
         where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (42) & version_parent = null & category = (0, 2, 4, 8, 9, 11);
         sort first_release_date asc;
         limit ${LIMIT};

@@ -22,7 +22,7 @@ export const PLATFORMS: { id: number; name: string; }[] = [
   },
   {
     id: 471,
-    name: 'Meta Quest 2 & 3',
+    name: 'Meta Quest 3',
   },
   {
     id: 390,

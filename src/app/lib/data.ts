@@ -17,13 +17,9 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
   endDate.setMonth(startDate.getMonth() + 1);
   endDate.setDate(0);
 
-  console.log(filters);
-
   // @ts-expect-error ts(2339)
   const platforms = typeof filters?.platforms === 'string' ? filters.platforms.split('-') : DEFAULT_PLATFORMS;
   const platformFilter = platforms[0] ? `(${platforms.join(', ')})` : null;
-
-  console.log(platforms, platformFilter);
 
   try {
     const response = await fetch(`${BASE}/games`, {

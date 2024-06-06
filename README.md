@@ -1,3 +1,9 @@
+gamesalmanac is a web app for tracking video game release dates.
+
+It was built using nextjs, shadcn, & tailwind. Data is sourced fromt the [igdb api](https://api-docs.igdb.com/).
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

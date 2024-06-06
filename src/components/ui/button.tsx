@@ -58,18 +58,24 @@ export interface ButtonProps
   asChild?: boolean
 }
 
+const animationConfig = (disabled?: boolean) => !disabled && {
+  variants: variants,
+  whileHover: { scale: 1.1 },
+  whileTap: { scale: 0.95 },
+};
+
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, disabled, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
     return (
       <motion.div
-        variants={variants}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        { ...animationConfig(disabled) }
       >
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}
           ref={ref}
+          disabled={disabled}
           {...props}
         />
       </motion.div>

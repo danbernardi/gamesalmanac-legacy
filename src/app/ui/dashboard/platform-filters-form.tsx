@@ -10,10 +10,12 @@ export default function PlatformFiltersForm({
   filters,
   onPlatformCheck,
   onSubmit,
+  disableBtn,
 }: { 
   filters: Filters;
   onPlatformCheck: (id: number) => void;
   onSubmit: () => void;
+  disableBtn: boolean;
 }) {
 
   return (
@@ -30,7 +32,7 @@ export default function PlatformFiltersForm({
         </div>
       ))}
 
-      <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm">
+      <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm" disabled={disableBtn}>
         Update filters
       </Button>
     </div>

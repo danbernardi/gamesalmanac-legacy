@@ -1,5 +1,9 @@
-import { CardsSkeleton } from '@/components/ui/skeletons';
+import { Loader } from "@/components/ui/loader";
 
 export default function Loading() {
-  return <CardsSkeleton />;
+  return (
+    <div className="flex w-full h-[30vh] items-center">
+      <Loader variant="blocks" theme="light" />
+    </div>
+  );
 }

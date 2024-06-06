@@ -33,6 +33,9 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       `
     });
 
+    // Force a 1 second load time
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     return response.json();
   } catch (error) {
     console.error('Database Error:', error);

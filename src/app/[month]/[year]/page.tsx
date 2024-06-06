@@ -9,6 +9,7 @@ import {
 import Image from "next/image";
 import { CATEGORIES } from "@/app/lib/constants";
 import { Badge } from "@/components/ui/badge";
+import { Loader } from "@/components/ui/loader";
 
 interface PageProps {
   params: { month: number; year: string; };
@@ -22,7 +23,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!games.length) {
     return (
-      <Card className="mb-3 min-h-[85vh]">
+      <Card className="mb-3">
         <CardHeader>
           <CardTitle>
             Games
@@ -30,6 +31,9 @@ export default async function Page({ params, searchParams }: PageProps) {
         </CardHeader>
         <CardContent>
           No games were found for the selected time frame & filters.
+          <div className="flex w-full h-[200px] items-center">
+            <Loader variant="pong" theme="dark" />
+          </div>
         </CardContent>
       </Card>
     )

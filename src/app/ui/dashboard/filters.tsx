@@ -11,6 +11,10 @@ const filtersInitialState: Filters = {
   platforms: DEFAULT_PLATFORMS,
 };
 
+const convertToArr = (str: string): number[] => {
+  return str.split('-').map(item => Number(item));
+}
+
 export default function Filters() {
   const searchParams = useSearchParams();
   let initialFilters = filtersInitialState;
@@ -19,7 +23,7 @@ export default function Filters() {
     Object.keys(paramsObj).forEach(key => {
       if (paramsObj[key].includes('-')) {
         // Convert dash separated string to array
-        const formattedParams: Array<number> = paramsObj[key].split('-').map(param => Number(param))
+        const formattedParams: Array<number> = convertToArr(paramsObj[key]);
         // @ts-expect-error ts(2322) - cannot coerce searchParam type into Filters type
         paramsObj[key] = formattedParams;
       } else {
@@ -75,6 +79,7 @@ export default function Filters() {
             filters={filters}
             onPlatformCheck={onPlatformCheck}
             onSubmit={onSubmit}
+            disableBtn={JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''))}
           />
         </CardContent>
       </Card>

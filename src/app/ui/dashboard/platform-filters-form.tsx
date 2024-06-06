@@ -30,7 +30,7 @@ export default function PlatformFiltersForm({
         </div>
       ))}
 
-      <Button className="w-full mt-6" variant="brand" onClick={onSubmit}>
+      <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm">
         Update filters
       </Button>
     </div>

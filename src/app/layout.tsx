@@ -1,4 +1,3 @@
-import Head from 'next/head';
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google"
 import { cn } from "@/lib/utils"
@@ -22,9 +21,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <Head>
-        <link rel="shortcut icon" href="/favicons/favicon.ico" />
-      </Head>
       <body className={cn(
           "font-sans antialiased",
           fontSans.variable

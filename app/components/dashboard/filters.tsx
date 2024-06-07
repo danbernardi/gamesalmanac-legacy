@@ -1,52 +1,53 @@
 'use client';
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import type { Filters } from '@/app/lib/types';
+import type { Filters } from '@/lib/types';
 import PlatformFiltersForm from "./platform-filters-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { DEFAULT_PLATFORMS } from "@/app/lib/constants";
+import { DEFAULT_PLATFORMS } from "@/lib/constants";
 
 const filtersInitialState: Filters = {
   platforms: DEFAULT_PLATFORMS,
+  favorites: [],
 };
 
 const convertToArr = (str: string): number[] => {
   return str.split('-').map(item => Number(item));
 }
 
+const convertParamsToArr = (params: Record<string, string>): Record<string, number[]> => {
+  let paramsObj = params as unknown as Record<string, number[]>;
+  Object.keys(params).forEach(key => {
+    if (params[key].includes('-')) {
+      // Convert dash separated string to array
+      const formattedParams: number[] = convertToArr(params[key]);
+      paramsObj[key] = formattedParams;
+    } else {
+      paramsObj[key] = [Number(paramsObj[key])];
+    }
+  });
+
+  return paramsObj;
+}
+
 export default function Filters() {
   const searchParams = useSearchParams();
   let initialFilters = filtersInitialState;
   if (searchParams.size) {
-    const paramsObj = Object.fromEntries(searchParams);
-    Object.keys(paramsObj).forEach(key => {
-      if (paramsObj[key].includes('-')) {
-        // Convert dash separated string to array
-        const formattedParams: Array<number> = convertToArr(paramsObj[key]);
-        // @ts-expect-error ts(2322) - cannot coerce searchParam type into Filters type
-        paramsObj[key] = formattedParams;
-      } else {
-        // @ts-expect-error ts(2322) - cannot coerce searchParam type into Filters type
-        paramsObj[key] = [Number(paramsObj[key])];
-      }
-    })
-
-    // @ts-expect-error ts(2741) - cannot coerce searchParam type into Filters type
-    initialFilters = paramsObj;
+    const paramsObj: Record<string, string> = Object.fromEntries(searchParams);
+    initialFilters = convertParamsToArr(paramsObj) as unknown as Filters;
   }
 
   const pathname = usePathname();
   const { replace } = useRouter();
-  const [filters, setFilters] = useState<Filters>(initialFilters)
+  const [filters, setFilters] = useState<Filters>(initialFilters);
 
   const onSubmit = () => {
     const params = new URLSearchParams(searchParams);
 
     Object.keys(filters).forEach((key: string) => {
-      // @ts-expect-error ts(7053) - cannot coerce searchParam type into Filters type
-      if (filters[key] !== params.get(key)) {
-        // @ts-expect-error ts(7053) - cannot coerce searchParam type into Filters type
+      if (JSON.stringify(filters[key]) !== params.get(key)) {
         params.set(key, `${filters[key].join('-')}`)
       };
     })

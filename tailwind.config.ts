@@ -50,6 +50,10 @@ const config = {
           DEFAULT: "var(--brand)",
           foreground: "var(--brand-foreground)",
         },
+        heart: {
+          DEFAULT: "var(--heart)",
+          foreground: "var(--heart-foreground)",
+        },
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",

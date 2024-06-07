@@ -10,16 +10,15 @@ const headers = {
 
 const LIMIT = 500;
 
-export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Filters) {
-  const monthStr = MONTHS[month];
-  const startDate = new Date(`${monthStr} 1 ${year}`);
-  const endDate = new Date(`${monthStr} 1 ${year}`);
+export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Record<string, string>) {
+  const monthStr: string = MONTHS[month];
+  const startDate: Date = new Date(`${monthStr} 1 ${year}`);
+  const endDate: Date = new Date(`${monthStr} 1 ${year}`);
   endDate.setMonth(startDate.getMonth() + 1);
   endDate.setDate(0);
 
-  // @ts-expect-error ts(2339)
-  const platforms = typeof filters?.platforms === 'string' ? filters.platforms.split('-') : DEFAULT_PLATFORMS;
-  const platformFilter = platforms[0] ? `(${platforms.join(', ')})` : null;
+  const platforms: number[] = typeof filters?.platforms === 'string' ? filters.platforms.split('-').map(plat => Number(plat)) : DEFAULT_PLATFORMS;
+  const platformFilter: string | null = platforms.length ? `(${platforms.join(', ')})` : null;
 
   try {
     const response = await fetch(`${BASE}/games`, {
@@ -33,7 +32,7 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       `
     });
 
-    // Force a 1 second load time
+    // Force a 1 second load time, this helps the animation look better
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return response.json();

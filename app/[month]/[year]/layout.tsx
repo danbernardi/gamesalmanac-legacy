@@ -1,6 +1,6 @@
-import Filters from '@/app/ui/dashboard/filters';
-import Header from '@/app/ui/dashboard/header';
-import SideNav from '@/app/ui/dashboard/sidenav';
+import Filters from '@/components/dashboard/filters';
+import Header from '@/components/dashboard/header';
+import SideNav from '@/components/dashboard/sidenav';
  
 export default function Layout({ children }: { children: React.ReactNode }) {
 

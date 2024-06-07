@@ -20,6 +20,4 @@ export interface Platform {
   alternative_name: string;
 };
 
-export interface Filters {
-  platforms: number[]
-};
+export type Filters = Record<string, number[]>;

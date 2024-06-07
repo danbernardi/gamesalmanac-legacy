@@ -1,10 +1,10 @@
 
 
-import { PLATFORMS } from "@/app/lib/constants";
+import { PLATFORMS } from "@/lib/constants";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
-import { Filters } from "@/app/lib/types";
+import { Filters } from "@/lib/types";
 
 export default function PlatformFiltersForm({
   filters,

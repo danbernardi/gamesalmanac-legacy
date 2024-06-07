@@ -18,21 +18,23 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
-  const initialFavorites = typeof window.localStorage !== undefined ? JSON.parse(window.localStorage?.getItem('favorites') || '') : [];
+  const initialFavorites = typeof window?.localStorage !== 'undefined' ? JSON.parse(window.localStorage?.getItem('favorites') || '') : [];
   const [favoritesState, setFavoritesState] = useState(initialFavorites);
 
   const onFavorite = (gameId: number) => {
-    const favoritesStr: string | null = window.localStorage?.getItem('favorites') || '';
-    const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
+    if (typeof window?.localStorage !== 'undefined') {
+      const favoritesStr: string | null = window.localStorage?.getItem('favorites') || '';
+      const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
 
-    if (favoritesArr?.includes(gameId)) {
-      favoritesArr.splice(favoritesArr.indexOf(gameId), 1);
-    } else {
-      favoritesArr.push(gameId);
+      if (favoritesArr?.includes(gameId)) {
+        favoritesArr.splice(favoritesArr.indexOf(gameId), 1);
+      } else {
+        favoritesArr.push(gameId);
+      }
+
+      window.localStorage?.setItem('favorites', JSON.stringify(favoritesArr));
+      setFavoritesState(favoritesArr);
     }
-
-    window.localStorage?.setItem('favorites', JSON.stringify(favoritesArr));
-    setFavoritesState(favoritesArr);
   };
 
   return (

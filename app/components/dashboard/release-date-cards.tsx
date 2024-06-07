@@ -97,9 +97,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger>
-                              <Button onClick={() => onFavorite(game.id)} variant={ favorites.includes(game.id) ? 'link' : 'ghost' }>
-                                <Heart fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' } />
-                              </Button>
+                              <Heart onClick={() => onFavorite(game.id)} fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' } />
                             </TooltipTrigger>
                             <TooltipContent>
                               <p>{`${favorites.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>

@@ -12,6 +12,32 @@ const LIMIT = 500;
 const ADULT_THEME = 42;
 const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 
+export async function fetchGamesByFavorite(ids: string) {
+  const favorites: number[] = ids.split('-').map(fav => Number(fav));
+  const favoritesFilter: string | null = favorites.length ? `(${favorites.join(', ')})` : null;
+
+  try {
+    const response = await fetch(`${BASE}/games`, {
+      method: 'POST',
+      headers,
+      body: `
+        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.width,cover.height,cover.url;
+        where id = ${favoritesFilter};
+        sort first_release_date asc;
+        limit ${LIMIT};
+      `
+    });
+
+    // Force a 1 second load time, this helps the animation look better
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
+    return response.json();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch games data.');
+  }
+}
+
 export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Record<string, string>) {
   const monthStr: string = MONTHS[month];
   const startDate: Date = new Date(`${monthStr} 1 ${year}`);
@@ -28,7 +54,7 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,version_parent,cover.width,cover.height,cover.url,total_rating,rating_count;
+        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.width,cover.height,cover.url;
         where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (${ADULT_THEME}) & version_parent = null & category = (${DEFAULT_CATEGORIES.join(', ')});
         sort first_release_date asc;
         limit ${LIMIT};
@@ -68,4 +94,4 @@ export function groupByDate(games: Game[]): Group {
   return groupedData;
 };
 
-export type Group = Record<string, { games: Game[] }>;
+export type Group = Record<string, { games: Game[] }>

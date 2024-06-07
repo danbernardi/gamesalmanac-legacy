@@ -21,7 +21,7 @@ export default function PlatformFiltersForm({
           <Label className="block w-full py-4 cursor-pointer" htmlFor={`toggle-${platform.id}-platform`}>{platform.name}</Label>
           <Switch
             id={`toggle-${platform.id}-platform`}
-            checked={filters.platforms.includes(platform.id)}
+            checked={filters?.platforms?.includes(platform.id)}
             onCheckedChange={() => onPlatformCheck(platform.id)}
           />
         </div>

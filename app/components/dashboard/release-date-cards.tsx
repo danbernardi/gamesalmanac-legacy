@@ -10,10 +10,15 @@ import { motion } from "framer-motion";
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
-const initialFavorites = typeof localStorage !== undefined ? JSON.parse(localStorage?.getItem('favorites') || '') : [];
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
+  const initialFavorites = typeof localStorage !== undefined ? JSON.parse(localStorage?.getItem('favorites') || '') : [];
   const [favoritesState, setFavoritesState] = useState(initialFavorites);
 
   const onFavorite = (gameId: number) => {
@@ -87,9 +92,18 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         whileHover={ { scale: 0.8 } }
                         whileTap={ { scale: 1.25 } }
                       >
-                        <Button onClick={() => onFavorite(game.id)} variant={ favoritesState.includes(game.id) ? 'link' : 'ghost' }>
-                          <Heart fill={ favoritesState.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favoritesState.includes(game.id) ? 'var(--heart)' : '#BBB' } />
-                        </Button>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <Button onClick={() => onFavorite(game.id)} variant={ favoritesState.includes(game.id) ? 'link' : 'ghost' }>
+                                <Heart fill={ favoritesState.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favoritesState.includes(game.id) ? 'var(--heart)' : '#BBB' } />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{`${favoritesState.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
                       </motion.div>
                     </div>
                   </div>

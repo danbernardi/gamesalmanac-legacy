@@ -9,8 +9,7 @@ import { DEFAULT_PLATFORMS } from "@/lib/constants";
 import { Button } from "../ui/button";
 
 const filtersInitialState: Filters = {
-  platforms: DEFAULT_PLATFORMS,
-  favorites: [],
+  platforms: DEFAULT_PLATFORMS
 };
 
 const convertToArr = (str: string): number[] => {
@@ -57,7 +56,7 @@ export default function Filters() {
   }
 
   const onPlatformCheck = (id: number) => {
-    const newCheckedPlatforms = [...filters.platforms];
+    const newCheckedPlatforms = filters.platforms ? [...filters.platforms] : [];
     if (newCheckedPlatforms.includes(id)) {
       newCheckedPlatforms.splice(filters.platforms.indexOf(id), 1)
     } else {
@@ -71,7 +70,7 @@ export default function Filters() {
   }
 
   const disableBtn = JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
-
+  
   return (
     <div className="flex h-full flex-col mt-3">
       <Card className="sticky top-3">

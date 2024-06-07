@@ -74,15 +74,17 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         )}
                       </div>
                       <div>
-                        <strong className="flex items-center">
-                          {game.name}
-                        </strong>
-                        <div className="text-sm text-foreground/75">
-                          {game?.platforms?.map(plat => plat?.abbreviation || plat.alternative_name || plat.name).join(', ')}
+                        <div className="flex items-center">
+                          <strong className="flex items-center">
+                            {game.name}
+                          </strong>
+                          <Badge variant="outline" className="ml-1">
+                            {CATEGORIES[game.category]}
+                          </Badge>
                         </div>
-                        <Badge variant="outline" className="mt-2">
-                          {CATEGORIES[game.category]}
-                        </Badge>
+                        <span className="text-sm text-foreground/75">
+                          {game?.platforms?.map(plat => plat?.abbreviation || plat.alternative_name || plat.name).join(', ')}
+                        </span>
                       </div>
                     </div>
 

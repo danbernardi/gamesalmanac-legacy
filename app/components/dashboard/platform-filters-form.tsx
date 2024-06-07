@@ -1,7 +1,6 @@
 
 
 import { PLATFORMS } from "@/lib/constants";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Filters } from "@/lib/types";
@@ -9,13 +8,9 @@ import { Filters } from "@/lib/types";
 export default function PlatformFiltersForm({
   filters,
   onPlatformCheck,
-  onSubmit,
-  disableBtn,
 }: { 
   filters: Filters;
   onPlatformCheck: (id: number) => void;
-  onSubmit: () => void;
-  disableBtn: boolean;
 }) {
 
   return (
@@ -31,10 +26,6 @@ export default function PlatformFiltersForm({
           />
         </div>
       ))}
-
-      <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm" disabled={disableBtn}>
-        Update filters
-      </Button>
     </div>
   );
 }

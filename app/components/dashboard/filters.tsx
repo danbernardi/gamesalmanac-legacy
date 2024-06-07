@@ -6,6 +6,7 @@ import PlatformFiltersForm from "./platform-filters-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DEFAULT_PLATFORMS } from "@/lib/constants";
+import { Button } from "../ui/button";
 
 const filtersInitialState: Filters = {
   platforms: DEFAULT_PLATFORMS,
@@ -24,7 +25,7 @@ const convertParamsToArr = (params: Record<string, string>): Record<string, numb
       const formattedParams: number[] = convertToArr(params[key]);
       paramsObj[key] = formattedParams;
     } else {
-      paramsObj[key] = [Number(paramsObj[key])];
+      paramsObj[key] = paramsObj[key] ? [Number(paramsObj[key])] : [];
     }
   });
 
@@ -69,6 +70,8 @@ export default function Filters() {
     });
   }
 
+  const disableBtn = JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
+
   return (
     <div className="flex h-full flex-col mt-3">
       <Card className="sticky top-3">
@@ -79,9 +82,11 @@ export default function Filters() {
           <PlatformFiltersForm
             filters={filters}
             onPlatformCheck={onPlatformCheck}
-            onSubmit={onSubmit}
-            disableBtn={JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''))}
           />
+
+          <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm" disabled={disableBtn}>
+            Update filters
+          </Button>
         </CardContent>
       </Card>
     </div>

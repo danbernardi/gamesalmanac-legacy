@@ -11,7 +11,7 @@ import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 
-const initialFavorites = typeof localStorage !== undefined ? JSON.parse(localStorage?.getItem('favorites') || '') : '';
+const initialFavorites = typeof localStorage !== undefined ? JSON.parse(localStorage?.getItem('favorites') || '') : [];
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
   const [favoritesState, setFavoritesState] = useState(initialFavorites);
@@ -32,7 +32,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
 
   return (
     <ul>
-      {Object.keys(groupedGames).map((isoDate: string, index: number) => {
+      {Object.keys(groupedGames).map((isoDate: string) => {
         const entry = groupedGames[isoDate];
         const date = new Date(isoDate);
 

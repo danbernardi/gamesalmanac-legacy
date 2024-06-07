@@ -72,7 +72,7 @@ export default function Filters() {
   const disableBtn = JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
   
   return (
-    <div className="flex h-full flex-col mt-3">
+    <div className="flex md:h-full flex-col md:mt-3 mb-6">
       <Card className="sticky top-3">
         <CardHeader>
           <CardTitle>Filters</CardTitle>

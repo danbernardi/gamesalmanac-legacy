@@ -15,7 +15,6 @@ interface PageProps {
 
 export default async function Page({ searchParams }: PageProps) {
   const games = await fetchGamesByFavorite(searchParams.ids);
-  console.log(games);
 
   if (!games.length) {
     return (

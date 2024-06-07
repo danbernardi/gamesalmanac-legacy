@@ -21,7 +21,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!games.length) {
     return (
-      <Card className="mb-3">
+      <Card>
         <CardHeader>
           <CardTitle>
             Games

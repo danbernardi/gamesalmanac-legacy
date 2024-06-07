@@ -60,7 +60,7 @@ export interface ButtonProps
 
 const animationConfig = (disabled?: boolean) => !disabled && {
   variants: variants,
-  whileHover: { scale: 1.1 },
+  whileHover: { scale: 1.05 },
   whileTap: { scale: 0.95 },
 };
 

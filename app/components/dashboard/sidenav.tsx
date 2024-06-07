@@ -33,7 +33,7 @@ export default function SideNav() {
   }
 
   return (
-    <div className="flex h-full flex-col mt-3">
+    <div className="flex md:h-full flex-col mt-3">
       <div className="sticky top-3">
         <Card>
           <CardHeader>

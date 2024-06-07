@@ -18,11 +18,11 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
-  const initialFavorites = typeof localStorage !== undefined ? JSON.parse(localStorage?.getItem('favorites') || '') : [];
+  const initialFavorites = typeof window.localStorage !== undefined ? JSON.parse(window.localStorage?.getItem('favorites') || '') : [];
   const [favoritesState, setFavoritesState] = useState(initialFavorites);
 
   const onFavorite = (gameId: number) => {
-    const favoritesStr: string | null = localStorage?.getItem('favorites') || '';
+    const favoritesStr: string | null = window.localStorage?.getItem('favorites') || '';
     const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
 
     if (favoritesArr?.includes(gameId)) {
@@ -31,7 +31,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
       favoritesArr.push(gameId);
     }
 
-    localStorage?.setItem('favorites', JSON.stringify(favoritesArr));
+    window.localStorage?.setItem('favorites', JSON.stringify(favoritesArr));
     setFavoritesState(favoritesArr);
   };
 

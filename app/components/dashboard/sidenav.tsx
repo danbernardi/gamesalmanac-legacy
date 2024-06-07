@@ -26,7 +26,7 @@ export default function SideNav() {
   const router = useRouter()
 
   const linkToFavoritesPage = () => {
-    const favorites = JSON.parse(localStorage?.getItem('favorites') || '');
+    const favorites = JSON.parse(window.localStorage?.getItem('favorites') || '');
     const params = new URLSearchParams(searchParams);
     params.set('ids', favorites.join('-'));
     router.push(`/favorites?${params.toString()}`);

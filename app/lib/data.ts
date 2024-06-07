@@ -9,11 +9,14 @@ const headers = {
 };
 
 const LIMIT = 500;
+const ADULT_THEME = 42;
+const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 
 export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Record<string, string>) {
   const monthStr: string = MONTHS[month];
   const startDate: Date = new Date(`${monthStr} 1 ${year}`);
   const endDate: Date = new Date(`${monthStr} 1 ${year}`);
+  // Set endDate to last day of the month
   endDate.setMonth(startDate.getMonth() + 1);
   endDate.setDate(0);
 
@@ -26,7 +29,7 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       headers,
       body: `
         fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,version_parent,cover.width,cover.height,cover.url,total_rating,rating_count;
-        where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (42) & version_parent = null & category = (0, 2, 4, 8, 9, 11);
+        where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (${ADULT_THEME}) & version_parent = null & category = (${DEFAULT_CATEGORIES.join(', ')});
         sort first_release_date asc;
         limit ${LIMIT};
       `
@@ -48,11 +51,13 @@ export function groupByDate(games: Game[]): Group {
     const releaseDateStr = releaseDate.toISOString();
 
     if (acc[releaseDateStr]) {
+      // If entry for isoDate already exists, add current game to games array
       acc[releaseDateStr].games = [
         ...acc[releaseDateStr].games,
         curr,
       ]
     } else {
+      // If entry for isoDate doesn't exist, create it and put current game in the games array
       acc[releaseDateStr] = {
         games: [curr]
       }
@@ -63,8 +68,4 @@ export function groupByDate(games: Game[]): Group {
   return groupedData;
 };
 
-export interface Group {
-  [isoDate: string]: {
-    games: Game[];
-  };
-};
+export type Group = Record<string, { games: Game[] }>;

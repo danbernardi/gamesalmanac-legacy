@@ -12,8 +12,8 @@ const LIMIT = 500;
 const ADULT_THEME = 42;
 const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 
-export async function fetchGamesByFavorite(ids: string) {
-  const favorites: number[] = ids.split('-').map(fav => Number(fav));
+export async function fetchGamesByFavorite(ids?: string) {
+  const favorites: number[] = ids?.split('-').map(fav => Number(fav)) || [];
   const favoritesFilter: string | null = favorites.length ? `(${favorites.join(', ')})` : null;
 
   try {

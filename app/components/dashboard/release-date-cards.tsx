@@ -22,8 +22,8 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
   const [favoritesState, setFavoritesState] = useState(initialFavorites);
 
   const onFavorite = (gameId: number) => {
-    const favoritesStr: string | null = localStorage?.getItem('favorites');
-    const favoritesArr = favoritesStr ? JSON.parse(favoritesStr || '') : [];
+    const favoritesStr: string | null = localStorage?.getItem('favorites') || '';
+    const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
 
     if (favoritesArr?.includes(gameId)) {
       favoritesArr.splice(favoritesArr.indexOf(gameId), 1);

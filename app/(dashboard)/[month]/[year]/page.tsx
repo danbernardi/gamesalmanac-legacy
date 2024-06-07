@@ -1,5 +1,4 @@
 import { Group, fetchGamesByReleaseDate, groupByDate } from "@/lib/data";
-import type { Filters } from "@/lib/types";
 import ReleaseDateCards from "@/components/dashboard/release-date-cards";
 import {
   Card,
@@ -21,7 +20,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!games.length) {
     return (
-      <Card>
+      <Card className="mb-3">
         <CardHeader>
           <CardTitle>
             Games

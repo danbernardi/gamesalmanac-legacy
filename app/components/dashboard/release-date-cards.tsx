@@ -19,7 +19,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
   const [favorites, setFavorites] = useState<number[]>([]);
 
   useEffect(() => {
-    const localStorageFavorites = JSON.parse(localStorage.getItem('favorites') || '');
+    const localStorageFavorites = JSON.parse(localStorage?.getItem('favorites') || '');
     if (
       localStorageFavorites &&
       JSON.stringify(localStorageFavorites) !== JSON.stringify(favorites)

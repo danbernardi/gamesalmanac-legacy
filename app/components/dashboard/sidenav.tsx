@@ -23,16 +23,14 @@ export default function SideNav() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { year } = useParams();
-  const router = useRouter()
+  const router = useRouter();
 
   const linkToFavoritesPage = () => {
-    if (typeof window?.localStorage !== 'undefined') {
-      const favorites = JSON.parse(window.localStorage?.getItem('favorites') || '');
-      const params = new URLSearchParams(searchParams);
-      params.set('ids', favorites.join('-'));
-      router.push(`/favorites?${params.toString()}`);
-    }
-  }
+    const params = new URLSearchParams(searchParams);
+    const favorites = JSON.parse(localStorage.getItem('favorites') || '') || [];
+    params.set('ids', favorites.join('-'));
+    router.push(`/favorites?${params.toString()}`);
+  };
 
   return (
     <div className="flex md:h-full flex-col mt-3">

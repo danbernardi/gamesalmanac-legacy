@@ -1,7 +1,5 @@
 'use client';
 
-import { CATEGORIES } from "@/lib/constants";
-import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from "next/image";
 import type { Game } from '@/lib/types';
@@ -9,7 +7,7 @@ import { Group } from "@/lib/data";
 import { motion } from "framer-motion";
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -18,23 +16,29 @@ import {
 } from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
-  const initialFavorites = typeof window?.localStorage !== 'undefined' ? JSON.parse(window.localStorage?.getItem('favorites') || '') : [];
-  const [favoritesState, setFavoritesState] = useState(initialFavorites);
+  const [favorites, setFavorites] = useState<number[]>([]);
+
+  useEffect(() => {
+    const localStorageFavorites = localStorage?.getItem('favorites');
+    const favoritesArr = JSON.parse(localStorageFavorites as string) || [];
+    if (
+      favoritesArr &&
+      JSON.stringify(favoritesArr) !== JSON.stringify(favorites)
+    ) {
+      setFavorites(favoritesArr);
+    }
+  }, [favorites]);
 
   const onFavorite = (gameId: number) => {
-    if (typeof window?.localStorage !== 'undefined') {
-      const favoritesStr: string | null = window.localStorage?.getItem('favorites') || '';
-      const favoritesArr = favoritesStr ? JSON.parse(favoritesStr) : [];
-
-      if (favoritesArr?.includes(gameId)) {
-        favoritesArr.splice(favoritesArr.indexOf(gameId), 1);
-      } else {
-        favoritesArr.push(gameId);
-      }
-
-      window.localStorage?.setItem('favorites', JSON.stringify(favoritesArr));
-      setFavoritesState(favoritesArr);
+    const favoritesArr: number[] = [...favorites];
+    if (favoritesArr?.includes(gameId)) {
+      favoritesArr.splice(favoritesArr.indexOf(gameId), 1);
+    } else {
+      favoritesArr.push(gameId);
     }
+
+    localStorage.setItem('favorites', JSON.stringify(favoritesArr));
+    setFavorites(favoritesArr);
   };
 
   return (
@@ -94,12 +98,10 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         <TooltipProvider>
                           <Tooltip>
                             <TooltipTrigger>
-                              <Button onClick={() => onFavorite(game.id)} variant={ favoritesState.includes(game.id) ? 'link' : 'ghost' }>
-                                <Heart fill={ favoritesState.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favoritesState.includes(game.id) ? 'var(--heart)' : '#BBB' } />
-                              </Button>
+                              <Heart onClick={() => onFavorite(game.id)} fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' } />
                             </TooltipTrigger>
                             <TooltipContent>
-                              <p>{`${favoritesState.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>
+                              <p>{`${favorites.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>
                             </TooltipContent>
                           </Tooltip>
                         </TooltipProvider>

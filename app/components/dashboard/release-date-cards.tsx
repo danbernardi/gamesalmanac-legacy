@@ -52,8 +52,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
             key={isoDate}
             initial={{ opacity: 0, y: 100, scale: 0.9 }}
             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -100, scale: 0.9 }}
-            transition={{ type: "spring", stiffness: 40 }}
+            transition={{ type: 'spring', stiffness: 40 }}
             viewport={{ once: true }}
           >
             <Card className="mb-3">
@@ -66,17 +65,19 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
               <CardContent>
                 {entry.games.map((game: Game) => (
                   <div key={game.id} className="py-4 px-6 w-[calc(100%+3rem)] -ml-6 odd:bg-secondary/40 flex items-center justify-between">
-                    <div className="flex items-center">
-                      <div className="w-10 overflow-hidden rounded-sm mr-3">
+                    <div className="grid grid-cols-[57px,1fr] items-center">
+                      <div className="overflow-hidden rounded-sm mr-3 flex-shink-0">
                         {game?.cover?.url ? (
                           <Image
-                            width={game.cover.width}
-                            height={game.cover.height}
+                            width={45}
+                            height={45}
+                            className="max-w-full"
                             src={`https:${game.cover.url}`}
                             alt={`Cover thumbnail for ${game.name}`}
+                            unoptimized
                           />
                         ) : (
-                          <div className="w-10 h-10 bg-secondary-foreground/20" />
+                          <div className="h-10 bg-secondary-foreground/20" />
                         )}
                       </div>
                       <div>

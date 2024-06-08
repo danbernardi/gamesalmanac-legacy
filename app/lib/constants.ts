@@ -14,7 +14,7 @@ export const PLATFORMS: { id: number; name: string; }[] = [
   },
   {
     id: 169,
-    name: 'Series X',
+    name: 'Series X | S',
   },
   {
     id: 6,

@@ -23,7 +23,6 @@ const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month:
 export default function SideNav() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { year } = useParams();
   const router = useRouter();
 
   const linkToFavoritesPage = () => {
@@ -38,7 +37,7 @@ export default function SideNav() {
       <div className="sticky top-3">
         <Card>
           <CardHeader>
-            <CardTitle>{year}</CardTitle>
+            <CardTitle>2024</CardTitle>
           </CardHeader>
           <CardContent>
             {links(searchParams).map((link) => (

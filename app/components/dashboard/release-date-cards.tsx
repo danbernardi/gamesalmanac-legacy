@@ -56,7 +56,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
             viewport={{ once: true }}
           >
             <Card className="mb-3">
-              <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm py-4 text-center">
+              <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm py-4">
                 <CardTitle id={`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`} className="text-lg">
                   {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                 </CardTitle>

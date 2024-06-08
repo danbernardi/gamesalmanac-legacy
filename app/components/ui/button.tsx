@@ -55,7 +55,8 @@ const variants = {
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
-  asChild?: boolean
+  asChild?: boolean;
+  animate?: boolean;
 }
 
 const animationConfig = (disabled?: boolean) => !disabled && {
@@ -65,12 +66,12 @@ const animationConfig = (disabled?: boolean) => !disabled && {
 };
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, disabled, asChild = false, ...props }, ref) => {
+  ({ animate = true, className, variant, size, disabled, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
 
     return (
       <motion.div
-        { ...animationConfig(disabled) }
+        { ...animationConfig(disabled || !animate) }
       >
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}

@@ -1,4 +1,4 @@
-import { Group, fetchGamesByFavorite, groupByDate } from "@/lib/data";
+import { Group, fetchGamesBySearch, groupByDate, mungeData } from "@/lib/data";
 import ReleaseDateCards from "@/components/dashboard/release-date-cards";
 import NoData from "@/components/dashboard/no-data";
 
@@ -8,19 +8,19 @@ interface PageProps {
 }
 
 export default async function Page({ searchParams }: PageProps) {
-  const games = await fetchGamesByFavorite(searchParams?.ids);
+  const games = await fetchGamesBySearch(searchParams?.query);
 
   if (!games.length) {
     return (
-      <NoData message="You have no favorites. Favorite a game by clicking the heart." />
+      <NoData message="There are no matches for your search term. Please try again." />
     );
   };
 
-  const groupedGames: Group = groupByDate(games);
+  const groupedGames: Group = groupByDate(mungeData(games), true);
 
   return (
     <main>
       <ReleaseDateCards groupedGames={groupedGames} />
     </main>
-  );
+  )
 };

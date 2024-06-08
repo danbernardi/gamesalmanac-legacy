@@ -1,12 +1,6 @@
 import { Group, fetchGamesByReleaseDate, groupByDate } from "@/lib/data";
 import ReleaseDateCards from "@/components/dashboard/release-date-cards";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import { Loader } from "@/components/ui/loader";
+import NoData from "@/components/dashboard/no-data";
 
 interface PageProps {
   params: { month: number; year: string; };
@@ -20,21 +14,9 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   if (!games.length) {
     return (
-      <Card className="mb-3">
-        <CardHeader>
-          <CardTitle>
-            Games
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          No games were found for the selected time frame & filters.
-          <div className="flex w-full h-[200px] items-center">
-            <Loader variant="pong" theme="dark" />
-          </div>
-        </CardContent>
-      </Card>
-    )
-  }
+      <NoData message="No games were found for the selected time frame & filters." />
+    );
+  };
 
   const groupedGames: Group = groupByDate(games);
 
@@ -42,5 +24,5 @@ export default async function Page({ params, searchParams }: PageProps) {
     <main>
       <ReleaseDateCards groupedGames={groupedGames} />
     </main>
-  )
+  );
 };

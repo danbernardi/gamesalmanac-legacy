@@ -7,6 +7,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { DEFAULT_PLATFORMS } from "@/lib/constants";
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 const filtersInitialState: Filters = {
   platforms: DEFAULT_PLATFORMS
@@ -45,6 +46,8 @@ export default function Filters() {
 
   const onSubmit = () => {
     const params = new URLSearchParams(searchParams);
+    params.delete('ids');
+    params.delete('query');
 
     Object.keys(filters).forEach((key: string) => {
       if (JSON.stringify(filters[key]) !== params.get(key)) {
@@ -70,9 +73,16 @@ export default function Filters() {
   }
 
   const disableBtn = JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
-  
+
+  const isActive = !['/search', '/favorites'].includes(pathname);
+
   return (
-    <div className="flex md:h-full flex-col md:mt-3 mb-6">
+    <div
+      className={cn(
+        'flex md:h-full flex-col md:mt-3 mb-6',
+        { 'pointer-events-none opacity-50': !isActive }
+      )}
+    >
       <Card className="sticky top-3">
         <CardHeader>
           <CardTitle>Filters</CardTitle>

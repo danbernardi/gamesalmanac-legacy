@@ -11,6 +11,7 @@ const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month:
   const name = MONTHS[parseInt(month)];
   const params = new URLSearchParams(searchParams);
   params.delete('ids');
+  params.delete('query');
 
   return {
     name,

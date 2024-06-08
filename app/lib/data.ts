@@ -21,7 +21,7 @@ export async function fetchGamesByFavorite(ids?: string) {
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.width,cover.height,cover.url;
+        fields category,first_release_date,release_dates.*,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.url;
         where id = ${favoritesFilter};
         sort first_release_date asc;
         limit ${LIMIT};
@@ -40,11 +40,12 @@ export async function fetchGamesByFavorite(ids?: string) {
 
 export async function fetchGamesByReleaseDate(month: number, year: string, filters?: Record<string, string>) {
   const monthStr: string = MONTHS[month];
-  const startDate: Date = new Date(`${monthStr} 1 ${year}`);
+  const startDate: Date = new Date(`${monthStr} 1 ${year}`)
+  startDate.setUTCHours(0,0,0,0);
   const endDate: Date = new Date(`${monthStr} 1 ${year}`);
   // Set endDate to last day of the month
-  endDate.setMonth(startDate.getMonth() + 1);
-  endDate.setDate(0);
+  endDate.setUTCMonth(startDate.getUTCMonth() + 1);
+  endDate.setUTCDate(0);
 
   const platforms: number[] = typeof filters?.platforms === 'string' ? filters.platforms.split('-').map(plat => Number(plat)) : DEFAULT_PLATFORMS;
   const platformFilter: string | null = platforms.length ? `(${platforms.join(', ')})` : null;
@@ -54,8 +55,8 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.width,cover.height,cover.url;
-        where first_release_date > ${startDate.getTime() / 1000} & first_release_date < ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (${ADULT_THEME}) & version_parent = null & category = (${DEFAULT_CATEGORIES.join(', ')});
+        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.url;
+        where first_release_date >= ${startDate.getTime() / 1000} & first_release_date <= ${endDate.getTime() / 1000} & platforms = ${platformFilter} & themes != (${ADULT_THEME}) & version_parent = null & category = (${DEFAULT_CATEGORIES.join(', ')});
         sort first_release_date asc;
         limit ${LIMIT};
       `

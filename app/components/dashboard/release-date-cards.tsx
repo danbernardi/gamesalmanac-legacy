@@ -58,7 +58,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
             <Card className="mb-3">
               <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm">
                 <CardTitle id={`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`}>
-                  {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric' })}
+                  {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}
                 </CardTitle>
               </CardHeader>
 

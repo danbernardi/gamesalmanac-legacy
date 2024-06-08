@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import Image from 'next/image';
 import SearchForm from "./search-form";
+import { Suspense } from "react";
 
 export default function Header() {
   return (
@@ -13,7 +14,9 @@ export default function Header() {
         height={32}
       />
 
-      <SearchForm />
+      <Suspense>
+        <SearchForm />
+      </Suspense>
     </header>
   );
 }

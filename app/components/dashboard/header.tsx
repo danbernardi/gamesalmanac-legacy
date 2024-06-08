@@ -14,7 +14,7 @@ export default function Header() {
         height={32}
       />
 
-      <Suspense>
+      <Suspense fallback={(<></>)}>
         <SearchForm />
       </Suspense>
     </header>

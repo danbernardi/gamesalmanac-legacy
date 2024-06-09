@@ -16,7 +16,7 @@ import {
 import { Heart, SlidersHorizontal } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Filters from "./filters";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
 
 const monthLinks = (searchParams: URLSearchParams, year: string) => Object.keys(MONTHS).map((monthInd: string) => {
@@ -95,6 +95,11 @@ export default function SideNav() {
       router.push(href);
     }
   };
+
+  useEffect(() => {
+    if (month !== activeMonth) setActiveMonth(month);
+    if (year !== activeYear) setActiveYear(year);
+  }, [month, year]);
 
   const filtersActive = !['/search', '/favorites'].includes(pathname);
   const activePlatforms = searchParams?.get('platforms');
@@ -214,7 +219,7 @@ export default function SideNav() {
                       Edit Filters
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="end" alignOffset={-35} className="p-0">
+                  <PopoverContent align="start" side="bottom" className="p-0" avoidCollisions={false}>
                     <Filters card={false} onFiltersChange={() => setMobileFiltersOpen(false)} />
                   </PopoverContent>
                 </Popover>

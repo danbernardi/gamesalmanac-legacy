@@ -19,8 +19,7 @@ import Filters from "./filters";
 import { useState } from "react";
 import { Badge } from "../ui/badge";
 
-const monthLinks = (searchParams: URLSearchParams, params: Record<string, string>) => Object.keys(MONTHS).map((monthInd: string) => {
-  const { year } = params;
+const monthLinks = (searchParams: URLSearchParams, year: string) => Object.keys(MONTHS).map((monthInd: string) => {
   const name = MONTHS[parseInt(monthInd)];
   const searchParamsObj = new URLSearchParams(searchParams);
   searchParamsObj.delete('ids');
@@ -40,8 +39,7 @@ const monthLinks = (searchParams: URLSearchParams, params: Record<string, string
   }
 });
 
-const yearLinks = (searchParams: URLSearchParams, params: Record<string, string>) => Object.keys(YEARS).map((yearInd: string) => {
-  const { month } = params;
+const yearLinks = (searchParams: URLSearchParams, month: string) => Object.keys(YEARS).map((yearInd: string) => {
   const name = YEARS[parseInt(yearInd)];
   const searchParamsObj = new URLSearchParams(searchParams);
   searchParamsObj.delete('ids');
@@ -66,8 +64,10 @@ export default function SideNav() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-  const params = useParams<{ tag: string; item: string }>();
+  const { month, year } = useParams<{ month: string; year: string }>();
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
+  const [activeYear, setActiveYear] = useState<string>(year);
+  const [activeMonth, setActiveMonth] = useState<string>(month);
 
   const linkToFavoritesPage = () => {
     const searchParamsObj = new URLSearchParams(searchParams);
@@ -76,8 +76,20 @@ export default function SideNav() {
     router.push(`/favorites?${searchParamsObj.toString()}`);
   };
 
+  const onChangeMonth = (monthStr: string) => {
+    setActiveMonth(`${Object.values(MONTHS).indexOf(monthStr) + 1}`);
+    const monthHref = monthLinks(searchParams, year).find(link => link.name === monthStr)?.href;
+    if (monthHref) triggerLink(monthHref);
+  }
+
+  const onChangeYear = (yearStr: string) => {
+    setActiveYear(yearStr);
+    const yearHref = yearLinks(searchParams, month).find(link => link.name === Number(yearStr))?.href;
+    if (yearHref) triggerLink(yearHref);
+  }
+
   const triggerLink = (href: string) => {
-    if (href === 'favorites') {
+    if (href === '/favorites') {
       linkToFavoritesPage();
     } else {
       router.push(href);
@@ -95,23 +107,23 @@ export default function SideNav() {
             <div>
               {/* Year selector */}
               <Select
-                value={filtersActive ? yearLinks(searchParams, params)?.find(link => link.path === pathname)?.href || '' : ''}
-                onValueChange={triggerLink}
+                value={filtersActive ? activeYear || '' : ''}
+                onValueChange={onChangeYear}
                 name="select year"
               >
                 <SelectTrigger className="mb-3 md:mb-6 z-20">
                   <SelectValue placeholder="Select a year" />
                 </SelectTrigger>
                 <SelectContent>
-                  {yearLinks(searchParams, params).map((link) => (
-                    <SelectItem key={link.href} value={link.href}>{link.name}</SelectItem>
+                  {yearLinks(searchParams, month).map((link) => (
+                    <SelectItem key={link.href} value={`${link.name}`}>{link.name}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
 
               {/* Desktop month selector */}
               <div className="hidden md:block font-semibold">
-                {monthLinks(searchParams, params).map((link) => (
+                {monthLinks(searchParams, year).map((link) => (
                   <Button
                     key={link.href}
                     variant={ pathname === link.path ? 'default' : 'secondary' }
@@ -132,16 +144,16 @@ export default function SideNav() {
               {/* Mobile month select */}
               <div className="w-full flex md:hidden gap-4">
                 <Select
-                  value={filtersActive ? monthLinks(searchParams, params)?.find(link => link.path === pathname)?.href || '' : ''}
-                  onValueChange={triggerLink}
+                  value={filtersActive ? MONTHS[Number(activeMonth)] || '' : ''}
+                  onValueChange={onChangeMonth}
                   name="select-month"
                 >
                   <SelectTrigger className="z-20">
                     <SelectValue placeholder="Select a month" />
                   </SelectTrigger>
                   <SelectContent>
-                    {monthLinks(searchParams, params).map((link) => (
-                      <SelectItem key={link.href} value={link.href}>{link.name}</SelectItem>
+                    {monthLinks(searchParams, year).map((link) => (
+                      <SelectItem key={link.href} value={link.name}>{link.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>

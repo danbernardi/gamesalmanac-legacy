@@ -54,15 +54,18 @@ export default function SearchForm () {
         {query && (
           <Button
             variant="ghost"
+            role="button"
+            type="button"
             className="absolute right-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" animate={false}
             onClick={() => clearQuery(true)}
+            aria-label="Clear search"
           >
-            <X /> Clear
+            Clear
           </Button>
         )}
       </div>
-      <Button variant="default" asChild>
-        <input type="submit" value="Search" />
+      <Button variant="default" asChild aria-label="Submit search">
+        <input type="submit" value="Search" name="action" className="cursor-pointer" />
       </Button>
     </form>
   )

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname, useParams, useSearchParams, redirect, useRouter } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month: string) => {
   const name = MONTHS[parseInt(month)];

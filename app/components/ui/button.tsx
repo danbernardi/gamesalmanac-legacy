@@ -72,6 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <motion.div
         { ...animationConfig(disabled || !animate) }
+        tabIndex={-1}
       >
         <Comp
           className={cn(buttonVariants({ variant, size, className }))}

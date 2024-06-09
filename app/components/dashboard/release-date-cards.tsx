@@ -8,12 +8,6 @@ import { motion } from "framer-motion";
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -95,17 +89,14 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         className="ml-3"
                         whileHover={ { scale: 0.8 } }
                         whileTap={ { scale: 1.25 } }
+                        tabIndex={-1}
                       >
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Heart onClick={() => onFavorite(game.id)} fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' } />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{`${favorites.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <Button onClick={() => onFavorite(game.id)} variant="ghost" aria-label={ favorites.includes(game.id) ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites` }>
+                          <Heart
+                            fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' }
+                            color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' }
+                          />
+                        </Button>
                       </motion.div>
                     </div>
                   </div>

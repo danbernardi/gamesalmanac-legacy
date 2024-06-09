@@ -41,7 +41,7 @@ export default function Filters() {
   }
 
   const pathname = usePathname();
-  const { replace } = useRouter();
+  const router = useRouter();
   const [filters, setFilters] = useState<Filters>(initialFilters);
 
   const onSubmit = () => {
@@ -55,7 +55,7 @@ export default function Filters() {
       };
     })
 
-    replace(`${pathname}?${params.toString()}`);
+    router.push(`${pathname}?${params.toString()}`);
   }
 
   const onPlatformCheck = (id: number) => {
@@ -72,15 +72,13 @@ export default function Filters() {
     });
   }
 
-  const disableBtn = JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
-
   const isActive = !['/search', '/favorites'].includes(pathname);
+  const disableBtn = !isActive || JSON.stringify(filters.platforms) === JSON.stringify(convertToArr(searchParams.get('platforms') || ''));
 
   return (
     <div
       className={cn(
         'flex md:h-full flex-col md:mt-3 mb-6',
-        { 'pointer-events-none opacity-50': !isActive }
       )}
     >
       <Card className="sticky top-3">
@@ -91,6 +89,7 @@ export default function Filters() {
           <PlatformFiltersForm
             filters={filters}
             onPlatformCheck={onPlatformCheck}
+            isActive={isActive}
           />
 
           <Button className="w-full mt-6" variant="brand" onClick={onSubmit} size="sm" disabled={disableBtn}>

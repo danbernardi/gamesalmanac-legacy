@@ -35,23 +35,6 @@ const buttonVariants = cva(
   }
 )
 
-const variants = {
-  open: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      y: { stiffness: 1000, velocity: -100 }
-    }
-  },
-  closed: {
-    y: 50,
-    opacity: 0,
-    transition: {
-      y: { stiffness: 1000 }
-    }
-  }
-};
-
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -59,31 +42,38 @@ export interface ButtonProps
   animate?: boolean;
 }
 
-const animationConfig = (disabled?: boolean) => !disabled && {
-  variants: variants,
-  whileHover: { scale: 1.05 },
-  whileTap: { scale: 0.95 },
-};
-
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ animate = true, className, variant, size, disabled, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+    const compProps = {
+      className: cn(buttonVariants({ variant, size, className })),
+      ref,
+      disabled,
+      ...props
+    }
+
+    if (animate && !disabled) {
+      return (
+        <motion.div
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          tabIndex={-1}
+        >
+          <Comp
+            {...compProps}
+          />
+        </motion.div>
+      );
+    };
 
     return (
-      <motion.div
-        { ...animationConfig(disabled || !animate) }
-        tabIndex={-1}
-      >
-        <Comp
-          className={cn(buttonVariants({ variant, size, className }))}
-          ref={ref}
-          disabled={disabled}
-          {...props}
-        />
-      </motion.div>
+      <Comp
+        {...compProps}
+      />
     )
   }
 )
+
 Button.displayName = "Button"
 
 export { Button, buttonVariants }

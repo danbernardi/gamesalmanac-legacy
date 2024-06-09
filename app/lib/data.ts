@@ -48,9 +48,6 @@ export async function fetchGamesByFavorite(ids?: string) {
       `
     });
 
-    // Force a 1 second load time, this helps the animation look better
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
     return response.json();
   } catch (error) {
     console.error('Database Error:', error);
@@ -81,9 +78,6 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
         limit ${LIMIT};
       `
     });
-
-    // Force a 1 second load time, this helps the animation look better
-    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     return response.json();
   } catch (error) {

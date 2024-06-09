@@ -36,11 +36,11 @@ export default function ScrollToTopBtn () {
   };
 
   return (
-    <div className="fixed right-5 bottom-5">
+    <div className="fixed right-4 bottom-4">
         <Button
           className={
             cn(
-              'transition ease-in-out duration-500',
+              'transition ease-in-out duration-500 drop-shadow-md',
               { 'opacity-100 translate-y-0': showScrollBtn },
               { 'opacity-0 translate-y-10': !showScrollBtn }
             )}

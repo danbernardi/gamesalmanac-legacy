@@ -15,7 +15,7 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: `/${now.getMonth()}/${now.getFullYear()}`,
+        destination: `/${now.getMonth() + 1}/${now.getFullYear()}`,
         permanent: true,
       },
     ]

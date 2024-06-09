@@ -13,6 +13,10 @@ export interface Game {
   }
 };
 
+export interface GameBySearch {
+  game: Game;
+};
+
 export interface Platform {
   id: number;
   abbreviation: string;

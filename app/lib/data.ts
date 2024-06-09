@@ -1,5 +1,5 @@
 import { ACCESS_TOKEN, CLIENT_ID, DEFAULT_PLATFORMS, MONTHS } from "./constants";
-import { Filters, Game } from "./types";
+import { Filters, Game, GameBySearch } from "./types";
 
 const BASE = 'https://api.igdb.com/v4';
 const headers = {
@@ -12,6 +12,26 @@ const LIMIT = 500;
 const ADULT_THEME = 42;
 const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 
+export async function fetchGamesBySearch(query?: string) {
+  try {
+    const response = await fetch(`${BASE}/search`, {
+      method: 'POST',
+      headers,
+      body: `
+        fields game.category,game.first_release_date,game.name,game.platforms.abbreviation,game.platforms.alternative_name,game.platforms.name,game.cover.url;
+        search "${query}";
+        where game.version_parent = null & game.category = (0, 2, 4, 8, 9, 11) & game.first_release_date != null;
+        limit ${LIMIT};
+      `
+    });
+
+    return response.json();
+  } catch (error) {
+    console.error('Database Error:', error);
+    throw new Error('Failed to fetch games data.');
+  }
+}
+
 export async function fetchGamesByFavorite(ids?: string) {
   const favorites: number[] = ids?.split('-').map(fav => Number(fav)) || [];
   const favoritesFilter: string | null = favorites.length ? `(${favorites.join(', ')})` : null;
@@ -21,7 +41,7 @@ export async function fetchGamesByFavorite(ids?: string) {
       method: 'POST',
       headers,
       body: `
-        fields category,first_release_date,release_dates.*,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.url;
+        fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.url;
         where id = ${favoritesFilter};
         sort first_release_date asc;
         limit ${LIMIT};
@@ -72,8 +92,8 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
   }
 }
 
-export function groupByDate(games: Game[]): Group {
-  const groupedData = games.reduce((acc: Group, curr: Game): Group => {
+export function groupByDate(games: Game[], sort: boolean = false): Group {
+  let groupedData = games.reduce((acc: Group, curr: Game): Group => {
     const releaseDate = new Date(curr.first_release_date * 1000);
     const releaseDateStr = releaseDate.toISOString();
 
@@ -92,7 +112,23 @@ export function groupByDate(games: Game[]): Group {
     return acc;
   }, {});
 
+  if (sort) {
+    const sortedGroupedData = Object.keys(groupedData).sort();
+    groupedData = sortedGroupedData.reduce((acc: Group, key: string) => {
+      acc[key] = groupedData[key];
+      return acc;
+    }, {});
+  }
+
   return groupedData;
 };
+
+export function mungeData(games: GameBySearch[]): Game[] {
+  const mungedData = games.map((entry: GameBySearch) => ({
+    ...entry.game,
+  }));
+
+  return mungedData;
+}
 
 export type Group = Record<string, { games: Game[] }>

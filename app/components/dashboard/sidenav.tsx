@@ -5,12 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname, useParams, useSearchParams, redirect, useRouter } from "next/navigation";
+import { usePathname, useSearchParams, useRouter } from "next/navigation";
 
 const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month: string) => {
   const name = MONTHS[parseInt(month)];
   const params = new URLSearchParams(searchParams);
   params.delete('ids');
+  params.delete('query');
 
   return {
     name,
@@ -22,7 +23,6 @@ const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month:
 export default function SideNav() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
-  const { year } = useParams();
   const router = useRouter();
 
   const linkToFavoritesPage = () => {
@@ -37,7 +37,7 @@ export default function SideNav() {
       <div className="sticky top-3">
         <Card>
           <CardHeader>
-            <CardTitle>{year}</CardTitle>
+            <CardTitle>2024</CardTitle>
           </CardHeader>
           <CardContent>
             {links(searchParams).map((link) => (

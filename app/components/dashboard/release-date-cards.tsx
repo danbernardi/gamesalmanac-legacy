@@ -8,12 +8,6 @@ import { motion } from "framer-motion";
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
   const [favorites, setFavorites] = useState<number[]>([]);
@@ -56,9 +50,9 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
             viewport={{ once: true }}
           >
             <Card className="mb-3">
-              <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm">
-                <CardTitle id={`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`}>
-                  {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', timeZone: 'UTC' })}
+              <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm py-4">
+                <CardTitle id={`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`} className="text-lg">
+                  {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                 </CardTitle>
               </CardHeader>
 
@@ -95,17 +89,14 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                         className="ml-3"
                         whileHover={ { scale: 0.8 } }
                         whileTap={ { scale: 1.25 } }
+                        tabIndex={-1}
                       >
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger>
-                              <Heart onClick={() => onFavorite(game.id)} fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' } color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' } />
-                            </TooltipTrigger>
-                            <TooltipContent>
-                              <p>{`${favorites.includes(game.id) ? 'Remove from' : 'Add to'} favorites`}</p>
-                            </TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <Button onClick={() => onFavorite(game.id)} variant="ghost" aria-label={ favorites.includes(game.id) ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites` }>
+                          <Heart
+                            fill={ favorites.includes(game.id) ? 'var(--heart)' : 'transparent' }
+                            color={ favorites.includes(game.id) ? 'var(--heart)' : '#BBB' }
+                          />
+                        </Button>
                       </motion.div>
                     </div>
                   </div>

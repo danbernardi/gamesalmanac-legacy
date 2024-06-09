@@ -214,7 +214,7 @@ export default function SideNav() {
                       Edit Filters
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent align="end" alignOffset={-35} className="p-0">
+                  <PopoverContent align="start" side="bottom" className="p-0">
                     <Filters card={false} onFiltersChange={() => setMobileFiltersOpen(false)} />
                   </PopoverContent>
                 </Popover>

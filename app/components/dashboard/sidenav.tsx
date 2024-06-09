@@ -51,7 +51,7 @@ const yearLinks = (searchParams: URLSearchParams, month: string) => Object.keys(
 
   const paramStr = `?${searchParamsObj.toString()}`;
   const now = new Date();
-  const fallbackMonth = now.getFullYear() === name ? now.getMonth() : 1;
+  const fallbackMonth = now.getFullYear() === name ? now.getMonth() + 1 : 1;
 
   return {
     name,

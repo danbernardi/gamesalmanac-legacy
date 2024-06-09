@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import type { Filters } from '@/lib/types';
 import PlatformFiltersForm from "./platform-filters-form";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { DEFAULT_PLATFORMS } from "@/lib/constants";
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
@@ -49,6 +49,15 @@ export default function Filters({
   const pathname = usePathname();
   const router = useRouter();
   const [filters, setFilters] = useState<Filters>(initialFilters);
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    if (params.get('platforms') === null) {
+      params.set('platforms', DEFAULT_PLATFORMS.join('-'));
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  }, []);
 
   const onSubmit = () => {
     const params = new URLSearchParams(searchParams);

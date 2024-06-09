@@ -85,16 +85,17 @@ export default function SideNav() {
   };
 
   const filtersActive = !['/search', '/favorites'].includes(pathname);
+  const activePlatforms = searchParams?.get('platforms');
 
   return (
     <div className="flex md:h-full flex-col mt-3">
       <div className="lg:sticky lg:top-3">
         <Card>
-          <CardContent className="pb-4 pt-6">
+          <CardContent className="pb-3 pt-6">
             <div>
               {/* Year selector */}
               <Select
-                value={yearLinks(searchParams, params)?.find(link => link.path === pathname)?.href || undefined}
+                value={filtersActive ? yearLinks(searchParams, params)?.find(link => link.path === pathname)?.href || '' : ''}
                 onValueChange={triggerLink}
                 name="select year"
               >
@@ -131,7 +132,7 @@ export default function SideNav() {
               {/* Mobile month select */}
               <div className="w-full flex md:hidden gap-4">
                 <Select
-                  value={monthLinks(searchParams, params)?.find(link => link.path === pathname)?.href || undefined}
+                  value={filtersActive ? monthLinks(searchParams, params)?.find(link => link.path === pathname)?.href || '' : ''}
                   onValueChange={triggerLink}
                   name="select-month"
                 >
@@ -149,7 +150,7 @@ export default function SideNav() {
 
             {/* Mobile Favorites link */}
             <Button
-              className="block md:hidden px-0 pb-0 flex items-center justify-start z-10"
+              className="block md:hidden px-0 py-0 mt-2 flex items-center justify-start z-10"
               variant="link"
               onClick={linkToFavoritesPage}
               animate={false}
@@ -173,7 +174,6 @@ export default function SideNav() {
               className="w-full text-left"
               variant="brand"
               onClick={linkToFavoritesPage}
-              animate={false}
             >
               <Heart
                 width={16}
@@ -190,14 +190,14 @@ export default function SideNav() {
         {/* Mobile Filters */}
         {filtersActive && (
           <Card className="mt-3 block lg:hidden">
-            <CardContent className="pt-2 pb-4">
+            <CardContent className="py-4">
               <div>
                 <Popover
                   open={mobileFiltersOpen}
                   onOpenChange={(open) => setMobileFiltersOpen(open)}
                 >
                   <PopoverTrigger asChild>
-                    <Button variant="link" className="flex items-center p-0" animate={false} disabled={!filtersActive}>
+                    <Button variant="link" className="flex items-center p-0 h-auto" animate={false} disabled={!filtersActive}>
                       <SlidersHorizontal size={16} className="mr-2" />
                       Edit Filters
                     </Button>
@@ -207,16 +207,20 @@ export default function SideNav() {
                   </PopoverContent>
                 </Popover>
 
-                {searchParams.get('platforms')?.length && (
-                  <ul className="flex flex-wrap gap-2">
+                {activePlatforms && activePlatforms.length > 0 ? (
+                  <ul className="flex flex-wrap gap-2 mt-2">
                     {searchParams.get('platforms')?.split('-').map((platform: string) => (
-                      <li>
+                      <li key={platform}>
                         <Badge variant="outline" className="whitespace-nowrap">
                           {PLATFORMS.find(plat => plat.id === Number(platform))?.name}
                         </Badge>
                       </li>
                     ))}
                   </ul>
+                ): (
+                  <Badge variant="outline" className="whitespace-nowrap mt-2">
+                    No platforms active
+                  </Badge>
                 )}
                 </div>
             </CardContent>

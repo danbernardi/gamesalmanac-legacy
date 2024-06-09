@@ -47,6 +47,20 @@ export const MONTHS: { [key: number]: string } = {
   12: 'December',
 };
 
+// Construct YEARS data that is every year between 2020 and 1 year from this year
+export const YEARS: Record<number, number> = function () {
+  const now = new Date();
+  const nextYear = new Date(now.setFullYear(now.getFullYear() + 1));
+  const startYear = 2020;
+  const years: Record<number, number> = {};
+
+  for (let i: number = 0; i + startYear <= nextYear.getFullYear(); i++) {
+    years[i] = i + startYear;
+  }
+
+  return years;
+}();
+
 export const CATEGORIES: { [key: number]: string } = {
   0: 'Main Game',
   1: 'DLC Addon',

@@ -42,7 +42,7 @@ export default function SearchForm () {
           Search
         </Label>
         <Input
-          className="block w-full rounded-md border border-gray-200 py-[9px] pl-10 text-sm outline-2 placeholder:text-gray-500 text-card-foreground pr-11"
+          className="block w-full pl-10 text-card-foreground pr-11"
           placeholder="Search for a game"
           onChange={(e) => {
             setQuery(e.target.value);

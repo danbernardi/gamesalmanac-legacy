@@ -16,7 +16,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
         <div className="hidden lg:block">
           <Suspense fallback={<></>}>
-            <Filters />
+            <Filters card={true} />
           </Suspense>
         </div>
       </div>

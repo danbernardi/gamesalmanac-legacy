@@ -13,8 +13,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from "../ui/sheet";
+import { SlidersHorizontal } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Filters from "./filters";
+import { useState } from "react";
 
 const links = (searchParams: URLSearchParams) => Object.keys(MONTHS).map((month: string) => {
   const name = MONTHS[parseInt(month)];
@@ -35,6 +37,7 @@ export default function SideNav() {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
 
   const linkToFavoritesPage = () => {
     const params = new URLSearchParams(searchParams);
@@ -51,6 +54,8 @@ export default function SideNav() {
     }
   };
 
+  const filtersActive = !['/search', '/favorites'].includes(pathname);
+
   return (
     <div className="flex md:h-full flex-col mt-3">
       <div className="md:sticky md:top-3">
@@ -59,23 +64,22 @@ export default function SideNav() {
             <CardTitle className="flex justify-between items-center">
               2024
 
-              {/* <div className="block md:hidden">
-                <Sheet>
-                  <SheetTrigger>
-                    <Button variant="link" size="sm">
+              <div className="flex lg:hidden items-center">
+                <Popover
+                  open={mobileFiltersOpen}
+                  onOpenChange={(open) => setMobileFiltersOpen(open)}
+                >
+                  <PopoverTrigger asChild>
+                    <Button variant="link" className="flex items-center p-0" animate={false} disabled={!filtersActive}>
+                      <SlidersHorizontal size={16} className="mr-1" />
                       Filters
                     </Button>
-                  </SheetTrigger>
-                  <SheetContent>
-                    <SheetHeader>
-                      <SheetTitle>Filters</SheetTitle>
-                      <SheetDescription>
-                        <Filters />
-                      </SheetDescription>
-                    </SheetHeader>
-                  </SheetContent>
-                </Sheet>
-              </div> */}
+                  </PopoverTrigger>
+                  <PopoverContent align="end" alignOffset={-35} className="p-0">
+                    <Filters card={false} onFiltersChange={() => setMobileFiltersOpen(false)} />
+                  </PopoverContent>
+                </Popover>
+              </div>
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -101,7 +105,7 @@ export default function SideNav() {
             {/* Mobile month select */}
             <div className="flex md:hidden gap-4">
               <Select
-                defaultValue={links(searchParams)?.find(link => link.path === pathname)?.href || undefined}
+                value={links(searchParams)?.find(link => link.path === pathname)?.href || undefined}
                 onValueChange={triggerLink}
               >
                 <SelectTrigger>

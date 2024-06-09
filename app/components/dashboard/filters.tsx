@@ -32,7 +32,13 @@ const convertParamsToArr = (params: Record<string, string>): Record<string, numb
   return paramsObj;
 }
 
-export default function Filters() {
+export default function Filters({
+  card = true,
+  onFiltersChange
+}: {
+  card: boolean,
+  onFiltersChange?: () => void
+}) {
   const searchParams = useSearchParams();
   let initialFilters = filtersInitialState;
   if (searchParams.size) {
@@ -56,6 +62,7 @@ export default function Filters() {
     })
 
     router.push(`${pathname}?${params.toString()}`);
+    if(onFiltersChange) onFiltersChange();
   }
 
   const onPlatformCheck = (id: number) => {
@@ -81,7 +88,7 @@ export default function Filters() {
         'flex md:h-full flex-col md:mt-3 mb-6',
       )}
     >
-      <Card className="md:sticky md:top-3">
+      <Card className={cn('md:sticky md:top-3', { 'border-0 p-0 shadow-none': !card })}>
         <CardHeader>
           <CardTitle>Filters</CardTitle>
         </CardHeader>

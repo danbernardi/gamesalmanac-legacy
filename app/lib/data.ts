@@ -42,7 +42,7 @@ export async function fetchGamesByFavorite(ids?: string) {
       headers,
       body: `
         fields category,first_release_date,name,platforms.abbreviation,platforms.alternative_name,platforms.name,cover.url;
-        where id = ${favoritesFilter};
+        where id = ${favoritesFilter} & first_release_date != null;
         sort first_release_date asc;
         limit ${LIMIT};
       `

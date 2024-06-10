@@ -115,6 +115,7 @@ export default function SideNav() {
                 value={filtersActive ? activeYear || '' : ''}
                 onValueChange={onChangeYear}
                 name="select year"
+                aria-label="Select a year"
               >
                 <SelectTrigger className="mb-3 md:mb-6 z-20">
                   <SelectValue placeholder="Select a year" />
@@ -152,6 +153,7 @@ export default function SideNav() {
                   value={filtersActive ? MONTHS[Number(activeMonth)] || '' : ''}
                   onValueChange={onChangeMonth}
                   name="select-month"
+                  aria-label="Select a month"
                 >
                   <SelectTrigger className="z-20">
                     <SelectValue placeholder="Select a month" />

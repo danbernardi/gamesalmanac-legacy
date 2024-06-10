@@ -47,8 +47,8 @@ const config = {
           foreground: "hsl(var(--muted-foreground))",
         },
         brand: {
-          DEFAULT: "var(--brand)",
-          foreground: "var(--brand-foreground)",
+          DEFAULT: "hsl(var(--brand))",
+          foreground: "hsl(var(--brand-foreground))",
         },
         heart: {
           DEFAULT: "var(--heart)",

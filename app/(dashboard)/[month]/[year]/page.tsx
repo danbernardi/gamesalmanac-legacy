@@ -24,8 +24,6 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const groupedGames: Group = groupByDate(games);
 
-  console.log(month, year);
-
   return (
     <main>
       <ReleaseDateCards groupedGames={groupedGames} />

@@ -1,12 +1,22 @@
-import { ACCESS_TOKEN, CLIENT_ID, DEFAULT_PLATFORMS, MONTHS } from "./constants";
+import { CLIENT_ID, DEFAULT_PLATFORMS, MONTHS } from "./constants";
 import { Filters, Game, GameBySearch } from "./types";
+import { getValidToken } from "./auth-tokens";
 
 const BASE = 'https://api.igdb.com/v4';
-const headers = {
-  'Accept': 'application/json',
-  'Client-ID': `${CLIENT_ID}`,
-  'Authorization': `Bearer ${ACCESS_TOKEN}`,
-};
+
+async function getHeaders() {
+  const token = await getValidToken('igdb');
+  
+  if (!token) {
+    throw new Error('Failed to get valid IGDB token');
+  }
+
+  return {
+    'Accept': 'application/json',
+    'Client-ID': `${CLIENT_ID}`,
+    'Authorization': `Bearer ${token}`,
+  };
+}
 
 const LIMIT = 500;
 const ADULT_THEME = 42;
@@ -14,6 +24,8 @@ const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 
 export async function fetchGamesBySearch(query?: string) {
   try {
+    const headers = await getHeaders();
+    console.log(headers);
     const response = await fetch(`${BASE}/search`, {
       method: 'POST',
       headers,
@@ -37,6 +49,7 @@ export async function fetchGamesByFavorite(ids?: string) {
   const favoritesFilter: string | null = favorites.length ? `(${favorites.join(', ')})` : null;
 
   try {
+    const headers = await getHeaders();
     const response = await fetch(`${BASE}/games`, {
       method: 'POST',
       headers,
@@ -68,6 +81,7 @@ export async function fetchGamesByReleaseDate(month: number, year: string, filte
   const platformFilter: string | null = platforms.length ? `(${platforms.join(', ')})` : null;
 
   try {
+    const headers = await getHeaders();
     const response = await fetch(`${BASE}/games`, {
       method: 'POST',
       headers,

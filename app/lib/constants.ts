@@ -1,9 +1,11 @@
-export const CLIENT_ID: string | undefined = process.env.TWITCH_CLIENT_ID;
-export const SECRET: string | undefined = process.env.TWITCH_CLIENT_SECRET;
-export const ACCESS_TOKEN: string | undefined = process.env.TWITCH_ACCESS_TOKEN;
-export const RAWG_API_KEY: string | undefined = process.env.RAWG_API_KEY;
+export const CLIENT_ID: string | undefined = process.env.IGDB_CLIENT_ID;
+export const SECRET: string | undefined = process.env.IGDB_CLIENT_SECRET;
 
 export const PLATFORMS: { id: number; name: string; }[] = [
+  {
+    id: 120,
+    name: 'Switch 2',
+  },
   {
     id: 130,
     name: 'Switch',

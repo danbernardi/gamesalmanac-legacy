@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import SearchForm from "./search-form";
+import UserMenu from "./user-menu";
 import { Suspense } from "react";
 import Link from "next/link";
 
@@ -18,10 +19,8 @@ export default function Header() {
           priority
         />
       </Link>
-
-      <Suspense fallback={(<></>)}>
-        <SearchForm />
-      </Suspense>
+      <SearchForm />
+      <UserMenu />
     </header>
   );
 }

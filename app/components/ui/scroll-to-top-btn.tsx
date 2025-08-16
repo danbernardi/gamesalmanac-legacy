@@ -49,7 +49,7 @@ export default function ScrollToTopBtn () {
           animate={false}
           aria-label="Scroll to the top of the page"
         >
-          <ChevronUp color="#000" className="mr-1" />
+          <ChevronUp color="#000" />
         </Button>
     </div>
   );

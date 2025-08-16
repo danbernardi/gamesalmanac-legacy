@@ -29,23 +29,24 @@ export default function UserMenu() {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="ghost"
-          size="icon"
-          className="rounded-full p-0 w-8 h-8 flex items-center justify-center"
+          size="sm"
+          className="flex items-center justify-center"
           aria-label="User menu"
+          animate={false}
         >
           <User size={20} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-auto p-2">
+      <PopoverContent align="end" className="bg-white text-neutral-800 w-auto p-3">
         <p className="text-muted-foreground mb-2">{user.email}</p>
-        <button
+        <Button
           onClick={signOut}
-          className="flex items-center gap-2 w-full px-3 py-2 rounded hover:bg-muted text-sm text-left"
+          animate={false}
+          className="flex items-center gap-2 w-full px-3 py-2 text-sm text-left"
         >
           <LogOut size={16} />
           Sign Out
-        </button>
+        </Button>
       </PopoverContent>
     </Popover>
   )

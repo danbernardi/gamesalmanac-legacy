@@ -22,10 +22,13 @@ export default function Header() {
         </Link>
         <div className="sm:hidden inline"><UserMenu /></div>
       </div>
-      <Suspense fallback={(<></>)}>
-        <SearchForm />
-      </Suspense>  
-      <div className="hidden sm:inline"><UserMenu /></div>
+      
+      <div className="flex gap-4 items-center">
+        <Suspense fallback={(<></>)}>
+          <SearchForm />
+        </Suspense>  
+        <div className="hidden sm:inline"><UserMenu /></div>
+      </div>
     </header>
   );
 }

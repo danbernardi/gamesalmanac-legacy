@@ -9,20 +9,23 @@ export default function Header() {
 
   return (
     <header className="flex flex-col sm:flex-row h-full mt-3 pt-3 md:py-3 text-primary-foreground justify-between sm:items-center">
-      <Link href={`/${now.getMonth() + 1}/${now.getFullYear()}`}>
-        <Image
-          className="w-[240px] lg:w-[300px]"
-          src="/gamesalmanac_logo.svg"
-          alt="Games Almanac"
-          width={300}
-          height={32}
-          priority
-        />
-      </Link>
+      <div className="flex justify-between gap-4">
+        <Link href={`/${now.getMonth() + 1}/${now.getFullYear()}`}>
+          <Image
+            className="w-[240px] lg:w-[300px]"
+            src="/gamesalmanac_logo.svg"
+            alt="Games Almanac"
+            width={300}
+            height={32}
+            priority
+          />
+        </Link>
+        <div className="sm:hidden inline"><UserMenu /></div>
+      </div>
       <Suspense fallback={(<></>)}>
         <SearchForm />
       </Suspense>  
-      <UserMenu />
+      <div className="hidden sm:inline"><UserMenu /></div>
     </header>
   );
 }

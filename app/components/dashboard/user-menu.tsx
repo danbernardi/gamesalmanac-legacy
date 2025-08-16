@@ -37,7 +37,8 @@ export default function UserMenu() {
           <User size={20} />
         </Button>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-40 p-2">
+      <PopoverContent align="end" className="w-auto p-2">
+        <p className="text-muted-foreground mb-2">{user.email}</p>
         <button
           onClick={signOut}
           className="flex items-center gap-2 w-full px-3 py-2 rounded hover:bg-muted text-sm text-left"

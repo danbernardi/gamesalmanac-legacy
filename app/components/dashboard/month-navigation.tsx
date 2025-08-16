@@ -34,14 +34,13 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
         >
           <Button variant="outline" className="flex items-center gap-2 bg-card/75 border-border/75">
             <ChevronLeft size={16} />
-            <span className="hidden sm:inline">
+            <span>
               {getMonthName(previousMonth.month)} {previousMonth.year}
             </span>
-            <span className="sm:hidden">Previous</span>
           </Button>
         </Link>
 
-        <div className="text-center">
+        <div className="text-center hidden sm:inline">
           <span className="text-sm text-white/75">
             {getMonthName(month)} {year}
           </span>
@@ -52,10 +51,9 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
           className="flex items-center gap-2 hover:opacity-80 transition-opacity"
         >
           <Button variant="outline" className="flex items-center gap-2 bg-card/75 border-border/75">
-            <span className="hidden sm:inline">
+            <span>
               {getMonthName(nextMonth.month)} {nextMonth.year}
             </span>
-            <span className="sm:hidden">Next</span>
             <ChevronRight size={16} />
           </Button>
         </Link>

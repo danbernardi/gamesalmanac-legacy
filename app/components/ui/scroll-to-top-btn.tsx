@@ -40,7 +40,7 @@ export default function ScrollToTopBtn () {
         <Button
           className={
             cn(
-              'transition ease-in-out duration-500 drop-shadow-md',
+              'transition ease-in-out duration-500 drop-shadow-md bg-white hover:bg-white/75 text-neutral-500',
               { 'opacity-100 translate-y-0': showScrollBtn },
               { 'opacity-0 translate-y-10': !showScrollBtn }
             )}

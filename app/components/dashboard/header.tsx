@@ -19,7 +19,9 @@ export default function Header() {
           priority
         />
       </Link>
-      <SearchForm />
+      <Suspense fallback={(<></>)}>
+        <SearchForm />
+      </Suspense>  
       <UserMenu />
     </header>
   );

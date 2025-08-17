@@ -25,7 +25,6 @@ const DEFAULT_CATEGORIES = [0, 2, 4, 8, 9, 11];
 export async function fetchGamesBySearch(query?: string) {
   try {
     const headers = await getHeaders();
-    console.log(headers);
     const response = await fetch(`${BASE}/search`, {
       method: 'POST',
       headers,

@@ -56,8 +56,6 @@ export default function ScrollToToday({ month, year }: ScrollToTodayProps) {
           
           element = nextElement;
         }
-
-        console.log(element);
         
         if (element) {
           element.scrollIntoView({ 

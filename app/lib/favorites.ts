@@ -15,25 +15,16 @@ export class FavoritesService {
     try {
       const dbFavorites = await this.getDbFavorites();
       
-      if (localFavorites.length > 0 && dbFavorites.length === 0) {
+      // For authenticated users, database is the source of truth
+      // Only migrate localStorage to DB if DB is empty (first login)
+      if (dbFavorites.length === 0 && localFavorites.length > 0) {
         await this.syncToDb(localFavorites);
         return localFavorites;
       }
       
-      if (dbFavorites.length > 0 && localFavorites.length === 0) {
-        this.setLocalFavorites(dbFavorites);
-        return dbFavorites;
-      }
-      
-      const mergedFavorites = this.mergeFavorites(localFavorites, dbFavorites);
-      if (mergedFavorites.length !== dbFavorites.length) {
-        await this.syncToDb(mergedFavorites);
-      }
-      if (mergedFavorites.length !== localFavorites.length) {
-        this.setLocalFavorites(mergedFavorites);
-      }
-      
-      return mergedFavorites;
+      // Always use DB favorites and sync to localStorage
+      this.setLocalFavorites(dbFavorites);
+      return dbFavorites;
     } catch (error) {
       console.error('Error syncing favorites:', error);
       return localFavorites;
@@ -100,7 +91,7 @@ export class FavoritesService {
     }
   }
 
-  private setLocalFavorites(favorites: number[]): void {
+  setLocalFavorites(favorites: number[]): void {
     if (typeof window === 'undefined') return;
     
     try {
@@ -148,7 +139,7 @@ export class FavoritesService {
     }
   }
 
-  private async syncToDb(favorites: number[]): Promise<void> {
+  async syncToDb(favorites: number[]): Promise<void> {
     const response = await fetch('/api/favorites/sync', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -160,10 +151,6 @@ export class FavoritesService {
     }
   }
 
-  private mergeFavorites(local: number[], db: number[]): number[] {
-    const merged = new Set([...local, ...db]);
-    return Array.from(merged).sort((a, b) => a - b);
-  }
 }
 
 export const favoritesService = new FavoritesService();

@@ -7,9 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "db:generate": "dotenv-cli -e .env.local -- drizzle-kit generate",
-    "db:migrate": "dotenv-cli -e .env.local -- drizzle-kit migrate",
-    "db:push": "dotenv-cli -e .env.local -- drizzle-kit push"
+    "db:generate": "dotenv -e .env.local -- drizzle-kit generate",
+    "db:migrate": "dotenv -e .env.local -- drizzle-kit migrate",
+    "db:push": "dotenv -e .env.local -- drizzle-kit push"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",

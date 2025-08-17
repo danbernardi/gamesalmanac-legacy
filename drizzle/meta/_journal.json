@@ -8,6 +8,13 @@
       "when": 1755376261399,
       "tag": "0000_modern_zodiak",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1755402216902,
+      "tag": "0001_stale_wither",
+      "breakpoints": true
     }
   ]
 }

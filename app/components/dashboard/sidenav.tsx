@@ -18,6 +18,9 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Filters from "./filters";
 import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
+import { useFavorites } from '@/lib/hooks/useFavorites';
+import { favoritesService } from '@/lib/favorites';
+import { useAuth } from '@/components/auth-provider';
 
 const monthLinks = (searchParams: URLSearchParams, year: string) => Object.keys(MONTHS).map((monthInd: string) => {
   const name = MONTHS[parseInt(monthInd)];
@@ -68,11 +71,13 @@ export default function SideNav() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
   const [activeYear, setActiveYear] = useState<string>(year);
   const [activeMonth, setActiveMonth] = useState<string>(month);
+  const { favorites } = useFavorites();
+  const { user } = useAuth();
 
-  const linkToFavoritesPage = () => {
+  const linkToFavoritesPage = async () => {
     const searchParamsObj = new URLSearchParams(searchParams);
-    const favorites = JSON.parse(localStorage.getItem('favorites') || '') || [];
-    searchParamsObj.set('ids', favorites.join('-'));
+    const currentFavorites = await favoritesService.getFavorites(user);
+    searchParamsObj.set('ids', currentFavorites.join('-'));
     router.push(`/favorites?${searchParamsObj.toString()}`);
   };
 

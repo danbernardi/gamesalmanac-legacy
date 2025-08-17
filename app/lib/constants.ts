@@ -32,6 +32,7 @@ export const PLATFORMS: { id: number; name: string; }[] = [
   },
 ];
 
+// Switch 2, PS5, Series X
 export const DEFAULT_PLATFORMS: number[] = [508, 167, 169];
 
 export const MONTHS: { [key: number]: string } = {

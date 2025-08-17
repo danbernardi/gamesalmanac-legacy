@@ -12,7 +12,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function getNextMonth(month: number, year: string): { month: number, year: string } {
+export function getNextMonth(month: string, year: string): { month: number, year: string } {
   const currentMonth = Number(month);
   const currentYear = Number(year);
   
@@ -23,7 +23,7 @@ export function getNextMonth(month: number, year: string): { month: number, year
   return { month: currentMonth + 1, year };
 }
 
-export function getPreviousMonth(month: number, year: string): { month: number, year: string } {
+export function getPreviousMonth(month: string, year: string): { month: number, year: string } {
   const currentMonth = Number(month);
   const currentYear = Number(year);
   
@@ -34,6 +34,6 @@ export function getPreviousMonth(month: number, year: string): { month: number, 
   return { month: currentMonth - 1, year };
 }
 
-export function getMonthName(month: number): string {
-  return MONTHS[month] || 'Unknown';
+export function getMonthName(month: string): string {
+  return MONTHS[parseInt(month)] || 'Unknown';
 }

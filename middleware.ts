@@ -17,6 +17,7 @@ export async function middleware(request: NextRequest) {
     const year = now.getFullYear();
     const url = request.nextUrl.clone();
     url.pathname = `/${month}/${year}`;
+    url.searchParams.set('scrollToToday', 'true');
     return NextResponse.redirect(url, 308);
   }
   

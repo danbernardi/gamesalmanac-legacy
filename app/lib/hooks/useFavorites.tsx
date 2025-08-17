@@ -9,8 +9,6 @@ export function useFavorites() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [loading, setLoading] = useState(true);
 
-  console.log(favorites);
-
   const loadFavorites = useCallback(async () => {
     setLoading(true);
     try {

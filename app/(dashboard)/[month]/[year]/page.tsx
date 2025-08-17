@@ -2,16 +2,17 @@ import { Group, fetchGamesByReleaseDate, groupByDate } from "@/lib/data";
 import ReleaseDateCards from "@/components/dashboard/release-date-cards";
 import NoData from "@/components/dashboard/no-data";
 import MonthNavigation from "@/components/dashboard/month-navigation";
+import ScrollToToday from "@/components/dashboard/scroll-to-today";
 
 interface PageProps {
-  params: { month: number; year: string; };
+  params: { month: string; year: string; };
   searchParams: Record<string, string>;
 }
 
 export default async function Page({ params, searchParams }: PageProps) {
   const { month, year } = params;
   const filters = searchParams;
-  const games = await fetchGamesByReleaseDate(month, year, filters);
+  const games = await fetchGamesByReleaseDate(parseInt(month), year, filters);
 
   if (!games.length) {
     return (
@@ -26,6 +27,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <main>
+      <ScrollToToday month={month} year={year} />
       <ReleaseDateCards groupedGames={groupedGames} />
       <MonthNavigation month={month} year={year} searchParams={searchParams} />
     </main>

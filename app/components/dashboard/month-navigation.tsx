@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
 
 interface MonthNavigationProps {
-  month: number;
+  month: string;
   year: string;
   searchParams?: Record<string, string>;
 }
@@ -35,7 +35,7 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
           <Button variant="outline" className="flex items-center gap-2 bg-card/75 border-border/75">
             <ChevronLeft size={16} />
             <span>
-              {getMonthName(previousMonth.month)} {previousMonth.year}
+              {getMonthName(String(previousMonth.month))} {previousMonth.year}
             </span>
           </Button>
         </Link>
@@ -52,7 +52,7 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
         >
           <Button variant="outline" className="flex items-center gap-2 bg-card/75 border-border/75">
             <span>
-              {getMonthName(nextMonth.month)} {nextMonth.year}
+              {getMonthName(String(nextMonth.month))} {nextMonth.year}
             </span>
             <ChevronRight size={16} />
           </Button>

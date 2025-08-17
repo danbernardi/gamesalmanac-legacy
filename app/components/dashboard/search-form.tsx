@@ -36,7 +36,7 @@ export default function SearchForm () {
   }, [pathname]);
 
   return (
-    <form className="w-full flex gap-2 sm:ml-4 sm:max-w-[500px] sm:mt-0 mt-6" onSubmit={handleSubmit}>
+    <form className="w-full flex items-center gap-2 sm:ml-4 sm:max-w-[500px] sm:mt-0 mt-6" onSubmit={handleSubmit}>
       <div className="relative w-full">
         <Label htmlFor="search" className="sr-only">
           Search
@@ -64,7 +64,7 @@ export default function SearchForm () {
           </Button>
         )}
       </div>
-      <Button variant="default" asChild aria-label="Submit search">
+      <Button variant="default" asChild aria-label="Submit search" size="sm">
         <input type="submit" value="Search" name="action" className="cursor-pointer" />
       </Button>
     </form>

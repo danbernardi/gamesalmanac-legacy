@@ -3,12 +3,12 @@ export const SECRET: string | undefined = process.env.IGDB_CLIENT_SECRET;
 
 export const PLATFORMS: { id: number; name: string; }[] = [
   {
-    id: 120,
-    name: 'Switch 2',
-  },
-  {
     id: 130,
     name: 'Switch',
+  },
+  {
+    id: 508,
+    name: 'Switch 2',
   },
   {
     id: 167,
@@ -32,7 +32,8 @@ export const PLATFORMS: { id: number; name: string; }[] = [
   },
 ];
 
-export const DEFAULT_PLATFORMS: number[] = [130, 167, 169];
+// Switch 2, PS5, Series X
+export const DEFAULT_PLATFORMS: number[] = [508, 167, 169];
 
 export const MONTHS: { [key: number]: string } = {
   1: 'January',

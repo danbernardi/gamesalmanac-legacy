@@ -7,33 +7,10 @@ import { Group } from "@/lib/data";
 import { motion } from "framer-motion";
 import { Heart } from 'lucide-react';
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useFavorites } from '@/lib/hooks/useFavorites';
 
 export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Group }): React.ReactNode {
-  const [favorites, setFavorites] = useState<number[]>([]);
-
-  useEffect(() => {
-    const localStorageFavorites = localStorage?.getItem('favorites');
-    const favoritesArr = JSON.parse(localStorageFavorites as string) || [];
-    if (
-      favoritesArr &&
-      JSON.stringify(favoritesArr) !== JSON.stringify(favorites)
-    ) {
-      setFavorites(favoritesArr);
-    }
-  }, [favorites]);
-
-  const onFavorite = (gameId: number) => {
-    const favoritesArr: number[] = [...favorites];
-    if (favoritesArr?.includes(gameId)) {
-      favoritesArr.splice(favoritesArr.indexOf(gameId), 1);
-    } else {
-      favoritesArr.push(gameId);
-    }
-
-    localStorage.setItem('favorites', JSON.stringify(favoritesArr));
-    setFavorites(favoritesArr);
-  };
+  const { favorites, toggleFavorite } = useFavorites();
 
   return (
     <ul>
@@ -51,7 +28,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
           >
             <Card className="mb-3">
               <CardHeader className="top-0 sticky rounded-tl-lg rounded-tr-lg bg-card border-tl border-tr shadow-sm px-4 py-3 sm:py-4 sm:px-6">
-                <CardTitle id={`${date.getMonth()}-${date.getDay()}-${date.getFullYear()}`} className="text-lg">
+                <CardTitle id={`${date.getMonth()}-${date.getDate()}-${date.getFullYear()}`} className="text-lg">
                   {date.toLocaleDateString('en', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' })}
                 </CardTitle>
               </CardHeader>
@@ -93,7 +70,7 @@ export default function ReleaseDateCards ({ groupedGames }: { groupedGames: Grou
                       >
                         <Button
                           size="icon"
-                          onClick={() => onFavorite(game.id)}
+                          onClick={() => toggleFavorite(game.id)}
                           variant="ghost"
                           aria-label={ favorites.includes(game.id) ? `Remove ${game.name} from favorites` : `Add ${game.name} to favorites` }
                         >

@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname, useSearchParams, useRouter, useParams } from "next/navigation";
 import {
-  Select,
+  HybridSelect,
   SelectContent,
   SelectItem,
   SelectTrigger,
@@ -18,7 +18,6 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import Filters from "./filters";
 import { useEffect, useState } from "react";
 import { Badge } from "../ui/badge";
-import { useFavorites } from '@/lib/hooks/useFavorites';
 import { favoritesService } from '@/lib/favorites';
 import { useAuth } from '@/components/auth-provider';
 
@@ -42,26 +41,30 @@ const monthLinks = (searchParams: URLSearchParams, year: string) => Object.keys(
   }
 });
 
-const yearLinks = (searchParams: URLSearchParams, month: string) => Object.keys(YEARS).map((yearInd: string) => {
-  const name = YEARS[parseInt(yearInd)];
-  const searchParamsObj = new URLSearchParams(searchParams);
-  searchParamsObj.delete('ids');
-  searchParamsObj.delete('query');
-
-  if (searchParamsObj.get('platforms') === null) {
-    searchParamsObj.set('platforms', DEFAULT_PLATFORMS.join('-'));
-  }
-
-  const paramStr = `?${searchParamsObj.toString()}`;
+const yearLinks = (searchParams: URLSearchParams, month: string) => {
   const now = new Date();
-  const fallbackMonth = now.getFullYear() === name ? now.getMonth() + 1 : 1;
+  const currentYear = now.getFullYear();
+  const years = [currentYear - 1, currentYear, currentYear + 1, currentYear + 2];
+  return years.map((yearNum) => {
+    const name = yearNum;
+    const searchParamsObj = new URLSearchParams(searchParams);
+    searchParamsObj.delete('ids');
+    searchParamsObj.delete('query');
 
-  return {
-    name,
-    path: `/${month || fallbackMonth}/${name}`,
-    href: `/${month || fallbackMonth}/${name}${searchParamsObj.size ? paramStr : ''}`,
-  }
-});
+    if (searchParamsObj.get('platforms') === null) {
+      searchParamsObj.set('platforms', DEFAULT_PLATFORMS.join('-'));
+    }
+
+    const paramStr = `?${searchParamsObj.toString()}`;
+    const fallbackMonth = now.getFullYear() === name ? now.getMonth() + 1 : 1;
+
+    return {
+      name,
+      path: `/${month || fallbackMonth}/${name}`,
+      href: `/${month || fallbackMonth}/${name}${searchParamsObj.size ? paramStr : ''}`,
+    }
+  });
+};
 
 export default function SideNav() {
   const searchParams = useSearchParams();
@@ -71,7 +74,6 @@ export default function SideNav() {
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState<boolean>(false);
   const [activeYear, setActiveYear] = useState<string>(year);
   const [activeMonth, setActiveMonth] = useState<string>(month);
-  const { favorites } = useFavorites();
   const { user } = useAuth();
 
   const linkToFavoritesPage = async () => {
@@ -114,9 +116,9 @@ export default function SideNav() {
       <div className="lg:sticky lg:top-3">
         <Card>
           <CardContent className="pb-3 pt-6">
-            <div>
+            <div className="flex flex-col gap-2">
               {/* Year selector */}
-              <Select
+              <HybridSelect
                 value={filtersActive ? activeYear || '' : ''}
                 onValueChange={onChangeYear}
                 name="select year"
@@ -130,7 +132,7 @@ export default function SideNav() {
                     <SelectItem key={link.href} value={`${link.name}`}>{link.name}</SelectItem>
                   ))}
                 </SelectContent>
-              </Select>
+              </HybridSelect>
 
               {/* Desktop month selector */}
               <div className="hidden md:block font-semibold">
@@ -154,11 +156,12 @@ export default function SideNav() {
               
               {/* Mobile month select */}
               <div className="w-full flex md:hidden gap-4">
-                <Select
+                <HybridSelect
                   value={filtersActive ? MONTHS[Number(activeMonth)] || '' : ''}
                   onValueChange={onChangeMonth}
                   name="select-month"
                   aria-label="Select a month"
+                  className="w-full"
                 >
                   <SelectTrigger className="z-20">
                     <SelectValue placeholder="Select a month" />
@@ -168,7 +171,7 @@ export default function SideNav() {
                       <SelectItem key={link.href} value={link.name}>{link.name}</SelectItem>
                     ))}
                   </SelectContent>
-                </Select>
+                </HybridSelect>
               </div>
             </div>
 

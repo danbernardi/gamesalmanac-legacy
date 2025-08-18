@@ -6,30 +6,204 @@ import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+function useIsTouchDevice() {
+  const [isTouchDevice, setIsTouchDevice] = React.useState(false)
+  
+  React.useEffect(() => {
+    const checkTouch = () => {
+      setIsTouchDevice('ontouchstart' in window || navigator.maxTouchPoints > 0)
+    }
+    
+    checkTouch()
+    window.addEventListener('resize', checkTouch)
+    
+    return () => window.removeEventListener('resize', checkTouch)
+  }, [])
+  
+  return isTouchDevice
+}
+
+interface SelectItemData {
+  value: string
+  label: string
+  disabled?: boolean
+}
+
+interface HybridSelectProps {
+  value?: string
+  defaultValue?: string
+  onValueChange?: (value: string) => void
+  placeholder?: string
+  disabled?: boolean
+  className?: string
+  children?: React.ReactNode
+  items?: SelectItemData[]
+  useNative?: boolean
+  name: string;
+}
+
+const HybridSelect = React.forwardRef<HTMLElement, HybridSelectProps>(
+  ({ name, value, defaultValue, onValueChange, placeholder, disabled, className, children, items, useNative, ...props }, ref) => {
+    const isTouchDevice = useIsTouchDevice()
+    const shouldUseNative = useNative || isTouchDevice
+
+    // Extract options from SelectItem children - always call hooks at top level
+    const selectItems = React.useMemo(() => {
+      if (items && items.length > 0) {
+        return items
+      }
+
+      const extractedItems: SelectItemData[] = []
+      
+      React.Children.forEach(children, (child) => {
+        if (React.isValidElement(child)) {
+          // Handle SelectContent wrapper
+          if (child.type === SelectContent) {
+            React.Children.forEach(child.props.children, (contentChild) => {
+              if (React.isValidElement(contentChild) && contentChild.type === SelectItem) {
+                const childProps = contentChild.props as any
+                extractedItems.push({
+                  value: childProps.value,
+                  label: typeof childProps.children === 'string' 
+                    ? childProps.children 
+                    : childProps.value,
+                  disabled: childProps.disabled
+                })
+              }
+            })
+          }
+          // Handle direct SelectItem children
+          else if (child.type === SelectItem) {
+            const childProps = child.props as any
+            extractedItems.push({
+              value: childProps.value,
+              label: typeof childProps.children === 'string' 
+                ? childProps.children 
+                : childProps.value,
+              disabled: childProps.disabled
+            })
+          }
+        }
+      })
+
+      return extractedItems
+    }, [items, children])
+
+    if (shouldUseNative) {
+      return (
+        <NativeSelect
+          ref={ref as React.RefObject<HTMLSelectElement>}
+          value={value}
+          defaultValue={defaultValue}
+          onValueChange={onValueChange}
+          placeholder={placeholder}
+          disabled={disabled}
+          className={cn('w-full', className)}
+          name={name}
+        >
+          {selectItems.map((item) => (
+            <option key={item.value} value={item.value} disabled={item.disabled}>
+              {item.label}
+            </option>
+          ))}
+        </NativeSelect>
+      )
+    }
+
+    return (
+      <SelectPrimitive.Root
+        value={value}
+        defaultValue={defaultValue}
+        onValueChange={onValueChange}
+        disabled={disabled}
+        name={name}
+        {...props}
+      >
+        {children}
+      </SelectPrimitive.Root>
+    )
+  }
+)
+HybridSelect.displayName = "HybridSelect"
+
 const Select = SelectPrimitive.Root
 
 const SelectGroup = SelectPrimitive.Group
 
 const SelectValue = SelectPrimitive.Value
 
+interface NativeSelectProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  children: React.ReactNode
+  onValueChange?: (value: string) => void
+  value?: string
+  defaultValue?: string
+  placeholder?: string
+}
+
+const NativeSelect = React.forwardRef<HTMLSelectElement, NativeSelectProps>(
+  ({ className, children, onValueChange, value, defaultValue, placeholder, onChange, ...props }, ref) => {
+    const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+      onValueChange?.(e.target.value)
+      onChange?.(e)
+    }
+
+    return (
+      <div className="relative w-full">
+        <select
+          ref={ref}
+          value={value}
+          defaultValue={defaultValue}
+          onChange={handleChange}
+          className={cn(
+            "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 appearance-none cursor-pointer",
+            className
+          )}
+          {...props}
+        >
+          {placeholder && (
+            <option value="" disabled hidden>
+              {placeholder}
+            </option>
+          )}
+          {children}
+        </select>
+        <ChevronDown className="absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 opacity-50 pointer-events-none" />
+      </div>
+    )
+  }
+)
+NativeSelect.displayName = "NativeSelect"
+
+interface SelectTriggerProps extends React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger> {
+  useNative?: boolean
+}
+
 const SelectTrigger = React.forwardRef<
   React.ElementRef<typeof SelectPrimitive.Trigger>,
-  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>
->(({ className, children, ...props }, ref) => (
-  <SelectPrimitive.Trigger
-    ref={ref}
-    className={cn(
-      "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
-      className
-    )}
-    {...props}
-  >
-    {children}
-    <SelectPrimitive.Icon asChild>
-      <ChevronDown className="h-4 w-4 opacity-50" />
-    </SelectPrimitive.Icon>
-  </SelectPrimitive.Trigger>
-))
+  SelectTriggerProps
+>(({ className, children, useNative, ...props }, ref) => {
+  const isTouchDevice = useIsTouchDevice()
+  
+  if (useNative || isTouchDevice) {
+    return null
+  }
+
+  return (
+    <SelectPrimitive.Trigger
+      ref={ref}
+      className={cn(
+        "flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
+        className
+      )}
+      {...props}
+    >
+      {children}
+      <SelectPrimitive.Icon asChild>
+        <ChevronDown className="h-4 w-4 opacity-50" />
+      </SelectPrimitive.Icon>
+    </SelectPrimitive.Trigger>
+  )
+})
 SelectTrigger.displayName = SelectPrimitive.Trigger.displayName
 
 const SelectScrollUpButton = React.forwardRef<
@@ -157,4 +331,7 @@ export {
   SelectSeparator,
   SelectScrollUpButton,
   SelectScrollDownButton,
+  NativeSelect,
+  HybridSelect,
+  useIsTouchDevice,
 }

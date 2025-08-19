@@ -2,7 +2,6 @@ import { Group, fetchGamesByReleaseDate, groupByDate } from "@/lib/data";
 import ReleaseDateCards from "@/components/dashboard/release-date-cards";
 import NoData from "@/components/dashboard/no-data";
 import MonthNavigation from "@/components/dashboard/month-navigation";
-import ScrollToToday from "@/components/dashboard/scroll-to-today";
 
 interface PageProps {
   params: { month: string; year: string; };
@@ -27,7 +26,6 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <main>
-      <ScrollToToday month={month} year={year} />
       <ReleaseDateCards groupedGames={groupedGames} />
       <MonthNavigation month={month} year={year} searchParams={searchParams} />
     </main>

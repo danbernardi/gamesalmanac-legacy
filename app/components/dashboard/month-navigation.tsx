@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { getNextMonth, getPreviousMonth, getMonthName } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { motion } from 'framer-motion';
 
 interface MonthNavigationProps {
   month: string;
@@ -21,12 +20,7 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
   const queryPath = queryString ? `?${queryString}` : '';
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 100, scale: 0.9 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      transition={{ type: 'spring', stiffness: 40 }}
-      viewport={{ once: true, amount: 0, margin: '100px' }}
-    >
+    <div>
       <div className="flex justify-between items-center">
         <Link 
           href={`/${previousMonth.month}/${previousMonth.year}${queryPath}`}
@@ -58,6 +52,6 @@ export default function MonthNavigation({ month, year, searchParams }: MonthNavi
           </Button>
         </Link>
       </div>
-    </motion.div>
+    </div>
   );
 }

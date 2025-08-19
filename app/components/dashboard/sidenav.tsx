@@ -115,7 +115,7 @@ export default function SideNav() {
     <div className="flex md:h-full flex-col mt-3">
       <div className="lg:sticky lg:top-3">
         <Card>
-          <CardContent className="pb-3 pt-6">
+          <CardContent className="pt-6 pb-3 md:pb-6">
             <div className="flex flex-col gap-2">
               {/* Year selector */}
               <HybridSelect
@@ -124,7 +124,7 @@ export default function SideNav() {
                 name="select year"
                 aria-label="Select a year"
               >
-                <SelectTrigger className="mb-3 md:mb-6 z-20">
+                <SelectTrigger className="z-20 mb-1">
                   <SelectValue placeholder="Select a year" />
                 </SelectTrigger>
                 <SelectContent>
@@ -135,12 +135,12 @@ export default function SideNav() {
               </HybridSelect>
 
               {/* Desktop month selector */}
-              <div className="hidden md:block font-semibold">
+              <div className="hidden md:flex font-semibold flex-col gap-2">
                 {monthLinks(searchParams, year).map((link) => (
                   <Button
                     key={link.href}
                     variant={ pathname === link.path ? 'default' : 'secondary' }
-                    className="mb-3 w-full justify-start text-semibold"
+                    className="w-full justify-start text-semibold"
                     asChild
                   >
                     <Link href={link.href} className={cn(
@@ -175,6 +175,21 @@ export default function SideNav() {
               </div>
             </div>
 
+            <Button
+              className="w-full hidden md:flex items-center mt-3 justify-start"
+              variant="brand"
+              onClick={linkToFavoritesPage}
+            >
+              <Heart
+                width={16}
+                height={16}
+                fill="#FCFFFE"
+                color="#FCFFFE"
+                className="mr-3"
+              />
+              View favorites
+            </Button>
+
             {/* Mobile Favorites link */}
             <Button
               className="block md:hidden px-0 py-0 mt-2 flex items-center justify-start z-10"
@@ -188,26 +203,6 @@ export default function SideNav() {
                 fill="#7541E5"
                 color="#7541E5"
                 className="mr-2"
-              />
-              View favorites
-            </Button>
-          </CardContent>
-        </Card>
-
-        {/* Desktop Favorites link */}
-        <Card className="mt-3 hidden md:block">
-          <CardContent className="py-4">
-            <Button
-              className="w-full text-left"
-              variant="brand"
-              onClick={linkToFavoritesPage}
-            >
-              <Heart
-                width={16}
-                height={16}
-                fill="#FCFFFE"
-                color="#FCFFFE"
-                className="mr-3"
               />
               View favorites
             </Button>

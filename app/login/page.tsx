@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card } from '@/components/ui/card'
+import Link from 'next/link'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -111,15 +112,22 @@ export default function LoginPage() {
         </div>
 
         <div className="mt-4 text-center">
-          <button
+          <Button
+            variant="link"
             type="button"
             onClick={() => setIsSignUp(!isSignUp)}
-            className="text-sm text-muted-foreground hover:text-foreground"
+            className="text-sm text-foreground"
           >
             {isSignUp
               ? 'Already have an account? Sign in'
               : "Don't have an account? Sign up"}
-          </button>
+          </Button>
+        </div>
+
+        <div className="text-center">
+          <Button variant="link" className="text-muted-foreground hover:text-foreground" asChild>
+            <Link href="/">Continue to site without authenticating</Link>
+          </Button>
         </div>
 
         {message && (
